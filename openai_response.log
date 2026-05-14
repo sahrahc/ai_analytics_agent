@@ -1,0 +1,540 @@
+{
+  "timestamp": "2026-05-13 14:27:45.082933",
+  "response_id": "resp_06750d690f36b784006a04c298e49c8190a60cbb89fccf48b7",
+  "model": "gpt-5-mini-2025-08-07",
+  "response_text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"ROAS is defined as the ratio of total revenue to total cost at the grain of fct_campaign_daily (daily summary of ad campaign performance). At this grain we must aggregate revenue and cost across the selected grouping (here we aggregate by campaign_key and date_key to preserve the table grain) and compute the ratio as SUM(revenue_usd) / NULLIF(SUM(cost_usd), 0) to avoid divide-by-zero. The metric metadata specifies numerator= revenue_usd and denominator= cost_usd, so the SQL sums those expressions from the specified model.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  SUM(revenue_usd) AS revenue_usd,\\n  SUM(cost_usd) AS cost_usd,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / SUM(cost_usd) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY campaign_key, date_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"The semantic model provided for fct_campaign_daily lists only campaign_key and date_key columns. revenue_usd and cost_usd are not present in the provided metadata for fct_campaign_daily. Confirm these columns exist in the actual table or adjust the metric definition/source table accordingly.\",\n    \"ROAS division handles zero cost by returning NULL when total cost is zero (NULLIF/CASE used).\"\n  ]\n}",
+  "full_response": {
+    "id": "resp_06750d690f36b784006a04c298e49c8190a60cbb89fccf48b7",
+    "created_at": 1778696856.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5-mini-2025-08-07",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_06750d690f36b784006a04c299cc3481909725a1691ad56ac8",
+        "summary": [],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": null
+      },
+      {
+        "id": "msg_06750d690f36b784006a04c29c36148190b0c912bb9fe9b325",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"ROAS is defined as the ratio of total revenue to total cost at the grain of fct_campaign_daily (daily summary of ad campaign performance). At this grain we must aggregate revenue and cost across the selected grouping (here we aggregate by campaign_key and date_key to preserve the table grain) and compute the ratio as SUM(revenue_usd) / NULLIF(SUM(cost_usd), 0) to avoid divide-by-zero. The metric metadata specifies numerator= revenue_usd and denominator= cost_usd, so the SQL sums those expressions from the specified model.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  SUM(revenue_usd) AS revenue_usd,\\n  SUM(cost_usd) AS cost_usd,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / SUM(cost_usd) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY campaign_key, date_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"The semantic model provided for fct_campaign_daily lists only campaign_key and date_key columns. revenue_usd and cost_usd are not present in the provided metadata for fct_campaign_daily. Confirm these columns exist in the actual table or adjust the metric definition/source table accordingly.\",\n    \"ROAS division handles zero cost by returning NULL when total cost is zero (NULLIF/CASE used).\"\n  ]\n}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1778696864.0,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "effort": "low",
+      "generate_summary": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "sql_generation_response",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "metric_name": {
+              "type": "string"
+            },
+            "reasoning": {
+              "type": "string"
+            },
+            "sql": {
+              "type": "string"
+            },
+            "tables_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "columns_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "metric_name",
+            "reasoning",
+            "sql",
+            "tables_used",
+            "columns_used",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 3906,
+      "input_tokens_details": {
+        "cached_tokens": 3840
+      },
+      "output_tokens": 614,
+      "output_tokens_details": {
+        "reasoning_tokens": 192
+      },
+      "total_tokens": 4520
+    },
+    "user": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "moderation": null,
+    "presence_penalty": 0.0,
+    "store": true
+  }
+}
+
+{
+  "timestamp": "2026-05-13 17:58:52.802849",
+  "response_id": "resp_0eea007b5102f5c6006a04f41028808196a5fb287b53757850",
+  "model": "gpt-5-mini-2025-08-07",
+  "response_text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"Metric 'roas' is defined on model fct_campaign_daily as a ratio of numerator revenue_usd and denominator cost_usd. The fct_campaign_daily model in the provided semantic metadata contains campaign_key and date_key columns but does not list revenue_usd or cost_usd. Respecting the metric definition and table grain (daily per campaign), the SQL below computes the sum of revenue and cost at the campaign_key, date_key grain and calculates the ratio, protecting against division by zero. Note: revenue_usd and cost_usd are referenced as if they exist on fct_campaign_daily; metadata does not include these columns, so the query will fail unless those columns are actually present or a different source with those fields is provided.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  SUM(revenue_usd) AS revenue_usd,\\n  SUM(cost_usd) AS cost_usd,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / SUM(cost_usd) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY campaign_key, date_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"The semantic metadata for fct_campaign_daily does not list columns revenue_usd or cost_usd. The metric definition references them; confirm these columns exist or provide the correct source/model that contains revenue_usd and cost_usd.\",\n    \"Aggregation is applied at the table grain (campaign_key, date_key). If a different grain or additional dimension filters are required, adjust GROUP BY accordingly.\"\n  ]\n}",
+  "full_response": {
+    "id": "resp_0eea007b5102f5c6006a04f41028808196a5fb287b53757850",
+    "created_at": 1778709520.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5-mini-2025-08-07",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_0eea007b5102f5c6006a04f410e0b481969840b997fac9bbae",
+        "summary": [],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": null
+      },
+      {
+        "id": "msg_0eea007b5102f5c6006a04f417208c8196b5fb4d4a91b9d5e7",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"Metric 'roas' is defined on model fct_campaign_daily as a ratio of numerator revenue_usd and denominator cost_usd. The fct_campaign_daily model in the provided semantic metadata contains campaign_key and date_key columns but does not list revenue_usd or cost_usd. Respecting the metric definition and table grain (daily per campaign), the SQL below computes the sum of revenue and cost at the campaign_key, date_key grain and calculates the ratio, protecting against division by zero. Note: revenue_usd and cost_usd are referenced as if they exist on fct_campaign_daily; metadata does not include these columns, so the query will fail unless those columns are actually present or a different source with those fields is provided.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  SUM(revenue_usd) AS revenue_usd,\\n  SUM(cost_usd) AS cost_usd,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / SUM(cost_usd) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY campaign_key, date_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"The semantic metadata for fct_campaign_daily does not list columns revenue_usd or cost_usd. The metric definition references them; confirm these columns exist or provide the correct source/model that contains revenue_usd and cost_usd.\",\n    \"Aggregation is applied at the table grain (campaign_key, date_key). If a different grain or additional dimension filters are required, adjust GROUP BY accordingly.\"\n  ]\n}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1778709532.0,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "effort": "low",
+      "generate_summary": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "sql_generation_response",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "metric_name": {
+              "type": "string"
+            },
+            "reasoning": {
+              "type": "string"
+            },
+            "sql": {
+              "type": "string"
+            },
+            "tables_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "columns_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "metric_name",
+            "reasoning",
+            "sql",
+            "tables_used",
+            "columns_used",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 3929,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 763,
+      "output_tokens_details": {
+        "reasoning_tokens": 320
+      },
+      "total_tokens": 4692
+    },
+    "user": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "moderation": null,
+    "presence_penalty": 0.0,
+    "store": true
+  }
+}
+
+{
+  "timestamp": "2026-05-13 18:08:48.645078",
+  "response_id": "resp_0d758031b62f5666006a04f65e87f08196b96352c23ea398c5",
+  "model": "gpt-5-mini-2025-08-07",
+  "response_text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"roas is a ratio metric defined as revenue_usd / cost_usd at the fct_campaign_daily model grain (daily campaign-level). The source model fct_campaign_daily is a daily summary of campaign performance (campaign_key, date_key). To compute ROAS reliably we must aggregate revenue and cost (SUM) at the model grain and then divide, protecting against division by zero with NULLIF. The semantic metadata for fct_campaign_daily does not list revenue_usd or cost_usd, so the SQL below assumes those columns exist in STREAMING_ADS.streaming_ads_schema.fct_campaign_daily. If those columns live in a different model or under different names, the query must be adjusted.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  SUM(revenue_usd) AS revenue_usd,\\n  SUM(cost_usd) AS cost_usd,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / NULLIF(SUM(cost_usd), 0) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY campaign_key, date_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"The semantic model for fct_campaign_daily only lists campaign_key and date_key. revenue_usd and cost_usd are not present in the provided metadata. The SQL assumes revenue_usd and cost_usd exist in STREAMING_ADS.streaming_ads_schema.fct_campaign_daily \u2014 adjust column names or source model if they are located elsewhere.\",\n    \"ROAS is computed as SUM(revenue_usd) / SUM(cost_usd) and will return NULL when the summed cost is zero to avoid division-by-zero errors.\"\n  ]\n}",
+  "full_response": {
+    "id": "resp_0d758031b62f5666006a04f65e87f08196b96352c23ea398c5",
+    "created_at": 1778710110.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5-mini-2025-08-07",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_0d758031b62f5666006a04f65f49a08196bdb268048f27bb09",
+        "summary": [],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": null
+      },
+      {
+        "id": "msg_0d758031b62f5666006a04f664e2a08196b029d9d24e47efee",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"roas is a ratio metric defined as revenue_usd / cost_usd at the fct_campaign_daily model grain (daily campaign-level). The source model fct_campaign_daily is a daily summary of campaign performance (campaign_key, date_key). To compute ROAS reliably we must aggregate revenue and cost (SUM) at the model grain and then divide, protecting against division by zero with NULLIF. The semantic metadata for fct_campaign_daily does not list revenue_usd or cost_usd, so the SQL below assumes those columns exist in STREAMING_ADS.streaming_ads_schema.fct_campaign_daily. If those columns live in a different model or under different names, the query must be adjusted.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  SUM(revenue_usd) AS revenue_usd,\\n  SUM(cost_usd) AS cost_usd,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / NULLIF(SUM(cost_usd), 0) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY campaign_key, date_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"The semantic model for fct_campaign_daily only lists campaign_key and date_key. revenue_usd and cost_usd are not present in the provided metadata. The SQL assumes revenue_usd and cost_usd exist in STREAMING_ADS.streaming_ads_schema.fct_campaign_daily \u2014 adjust column names or source model if they are located elsewhere.\",\n    \"ROAS is computed as SUM(revenue_usd) / SUM(cost_usd) and will return NULL when the summed cost is zero to avoid division-by-zero errors.\"\n  ]\n}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1778710128.0,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "effort": "low",
+      "generate_summary": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "sql_generation_response",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "metric_name": {
+              "type": "string"
+            },
+            "reasoning": {
+              "type": "string"
+            },
+            "sql": {
+              "type": "string"
+            },
+            "tables_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "columns_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "metric_name",
+            "reasoning",
+            "sql",
+            "tables_used",
+            "columns_used",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 3984,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 690,
+      "output_tokens_details": {
+        "reasoning_tokens": 256
+      },
+      "total_tokens": 4674
+    },
+    "user": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "moderation": null,
+    "presence_penalty": 0.0,
+    "store": true
+  }
+}
+
+{
+  "timestamp": "2026-05-13 20:49:48.351205",
+  "response_id": "resp_07fbde76026cf6fb006a051c254ee481938c1435835075ee17",
+  "model": "gpt-5-mini-2025-08-07",
+  "response_text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"The metric is defined as a ratio with numerator = revenue_usd and denominator = cost_usd on the fct_campaign_daily model. The fct_campaign_daily table is already at the daily campaign grain (campaign_key, date_key). Do not invent joins. Compute ROAS per row using revenue_usd / cost_usd and protect against zero or NULL cost to avoid division errors. Return campaign_key and date_key to preserve table grain and make the metric sliceable by those dimensions.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  revenue_usd,\\n  cost_usd,\\n  CASE\\n    WHEN cost_usd IS NULL OR cost_usd = 0 THEN NULL\\n    ELSE revenue_usd / cost_usd\\n  END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"If cost_usd is zero or NULL, ROAS is returned as NULL to avoid division by zero.\",\n    \"The fct_campaign_daily model already contains a precomputed roas column; this query computes ROAS from the defined numerator and denominator (revenue_usd / cost_usd) to respect the metric definition.\",\n    \"This query preserves the table grain (campaign_key, date_key). If you need aggregated ROAS across campaigns or dates, apply aggregation for numerator and denominator first (SUM(revenue_usd) / SUM(cost_usd)) with the same zero-check.\"\n  ]\n}",
+  "full_response": {
+    "id": "resp_07fbde76026cf6fb006a051c254ee481938c1435835075ee17",
+    "created_at": 1778719781.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5-mini-2025-08-07",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_07fbde76026cf6fb006a051c25f9ec8193912cb2430562538a",
+        "summary": [],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": null
+      },
+      {
+        "id": "msg_07fbde76026cf6fb006a051c2874408193a3757989bae79eb7",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\n  \"metric_name\": \"roas\",\n  \"reasoning\": \"The metric is defined as a ratio with numerator = revenue_usd and denominator = cost_usd on the fct_campaign_daily model. The fct_campaign_daily table is already at the daily campaign grain (campaign_key, date_key). Do not invent joins. Compute ROAS per row using revenue_usd / cost_usd and protect against zero or NULL cost to avoid division errors. Return campaign_key and date_key to preserve table grain and make the metric sliceable by those dimensions.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  revenue_usd,\\n  cost_usd,\\n  CASE\\n    WHEN cost_usd IS NULL OR cost_usd = 0 THEN NULL\\n    ELSE revenue_usd / cost_usd\\n  END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"If cost_usd is zero or NULL, ROAS is returned as NULL to avoid division by zero.\",\n    \"The fct_campaign_daily model already contains a precomputed roas column; this query computes ROAS from the defined numerator and denominator (revenue_usd / cost_usd) to respect the metric definition.\",\n    \"This query preserves the table grain (campaign_key, date_key). If you need aggregated ROAS across campaigns or dates, apply aggregation for numerator and denominator first (SUM(revenue_usd) / SUM(cost_usd)) with the same zero-check.\"\n  ]\n}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1778719788.0,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "effort": "low",
+      "generate_summary": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "sql_generation_response",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "metric_name": {
+              "type": "string"
+            },
+            "reasoning": {
+              "type": "string"
+            },
+            "sql": {
+              "type": "string"
+            },
+            "tables_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "columns_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "metric_name",
+            "reasoning",
+            "sql",
+            "tables_used",
+            "columns_used",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 6797,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 590,
+      "output_tokens_details": {
+        "reasoning_tokens": 192
+      },
+      "total_tokens": 7387
+    },
+    "user": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "moderation": null,
+    "presence_penalty": 0.0,
+    "store": true
+  }
+}
+

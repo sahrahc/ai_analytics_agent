@@ -1,0 +1,240 @@
+models:
+  # =====================================================
+  - name: fct_ad_event
+    description: 
+      "An ad to user event such as user being shown an ad (impression), 
+      user interacting with an ad (click), or user taking action because
+      of an ad (conversion)."
+    
+    columns:
+    - name: event_id
+      entity:
+        type: primary
+        name: fct_ad_event
+
+    - name: event_type
+      dimension: categorical
+      data_tests:
+      - not_null
+      
+    - name: is_billable
+      dimension: categorical
+
+    - name: attribution_type
+      dimension: categorical
+
+    - name: user_key
+      entity:
+        type: foreign
+        name: dim_user
+
+    - name: ad_key
+      entity:
+        type: foreign
+        name: dim_ad
+
+    - name: campaign_key
+      entity:
+        type: foreign
+        name: dim_campaign
+
+    - name: device_key
+      entity:
+        type: foreign
+        name: dim_device
+
+    - name: placement_key
+      entity:
+        type: foreign
+        name: dim_placement
+
+    - name: date_key
+      entity: 
+        type: foreign
+        name: dim_calendar
+
+    - name: geo_key
+      entity:
+        type: foreign
+        name: dim_geo
+
+    metrics:
+      - name: revenue_usd
+        agg: sum
+      - name: cost_usd
+        agg: sum
+      - name: view_duration_ms
+        agg: sum
+  
+  # =====================================================
+  - name: fct_content_playback_session
+    description:
+      "An instance of a user viewing content within a session. A user may view content more
+      than once in the same session."
+    
+    columns:
+      - name: playback_session_id
+        data_tests:
+          - not_null
+          
+      - name: user_key
+        entity: 
+          type: foreign
+          name: dim_user
+        tests:
+          - not_null
+
+      - name: device_key
+        entity:
+          type: foreign
+          name: dim_device
+
+      - name: content_key
+        entity:
+          type: foreign
+          name: dim_content
+
+      - name: date_key
+        entity: 
+          type: foreign
+          name: dim_calendar
+
+      - name: geo_key
+        entity:
+          type: foreign
+          name: dim_geo
+
+      - name: hour_of_day
+        entity:
+          type: foreign
+          name: dim_time
+      
+    metrics:
+      - name: session_duration_minutes
+        agg: sum
+
+      - name: content_duration_minutes
+        agg: sum
+  
+      - name: active_users
+        type: simple
+        agg: count_distinct
+        expr: user_id
+        description: "The count of users who recently ad activity"
+      
+      # flags are both additive and dimensions
+      - name: is_binge  
+        agg: sum
+    
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        arguments:
+          combination_of_columns:
+            - content_key
+            - date_key
+
+  # =====================================================
+
+  - name: fct_campaign_daily
+    description:
+      "Daily summary of ad campaign performance"
+    agg_time_dimension: date_key
+
+    columns:
+      - name: campaign_key
+        entity:
+          type: primary
+          name: fct_campaign_daily
+
+      - name: date_key
+        entity:
+          type: foreign
+          name: dim_calendar
+        data_tests:
+          - not_null
+  
+    metrics:
+      - name: impressions
+        agg: sum
+        expr: impressions
+      - name: clicks
+        agg: sum
+        expr: impressions
+      - name: conversions
+        agg: sum
+        expr: conversions
+      - name: click_through_conversions
+        agg: sum
+        expr: click_through_conversions
+      - name: view_through_conversions
+        agg: sum
+        expr: view_through_conversions
+      - name: revenue_usd
+        agg: sum
+        expr: revenue_usd
+      - name: cost_usd
+        agg: sum
+        expr: cost_usd
+
+      - name: click_cvr
+        type: ratio
+        label: Conversion Rate with Click Attribution
+        numerator: clicks
+        denominator: impressions
+        description: "An instance of a user taking desired action after interacting with an ad"
+          
+      - name: ctr
+        type: ratio
+        label: Click Through Rate
+        numerator: clicks
+        denominator: impressions
+        description: "An instance of the user clicking or taking other action on an ad"
+
+      - name: cvr
+        type: ratio
+        label: Conversion Rate
+        numerator: conversions
+        denominator: clicks
+        description: "An instance of the user taking desired action because of an ad"
+
+      - name: view_cvr
+        type: ratio
+        label: Conversion Rate with Impression Attribution
+        numerator: clicks
+        denominator: impressions
+        description: "An instance of a user taking desired action after viewing an ad"
+    
+      - name: roas
+        type: ratio
+        label: Return on Ad Spend
+        numerator: revenue_usd
+        denominator: cost_usd
+        description: "A measure of how effectively the marketing budget performs (ad efficiency)"
+
+    tests:
+    - dbt_utils.unique_combination_of_columns:
+        arguments:
+          combination_of_columns:
+            - campaign_key
+            - date_key
+
+  # =====================================================
+
+  - name: fct_content_monetization_daily
+    description:
+      "Daily financial metrics per content"
+
+    metrics:
+    - name: playback_hours
+      type: simple
+      agg: sum
+      expr: playback_hours
+
+    - name: ad_load_per_hour
+      type: ratio
+      label: Ad Load
+      numerator: impressions
+      denominator: playback_hours
+      description: "Ad load assuming aveage of 30 second ads"
+
+    

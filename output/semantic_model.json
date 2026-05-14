@@ -1,0 +1,1082 @@
+{
+  "models": [
+    {
+      "name": "dim_placement",
+      "description": "Location in playback app where ad may be placed",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_placement",
+      "columns": [
+        {
+          "name": "placement_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "surface",
+          "description": "The component within the playback app. Examples: ui, player",
+          "data_type": "text"
+        },
+        {
+          "name": "placement",
+          "description": "The subcomponent of the playback app in relation to the player. Examples: pause_screen, post_roll",
+          "data_type": "text"
+        },
+        {
+          "name": "position",
+          "description": "The component within the playback app in relation to the content. Examples: post_role, home_sponsorship",
+          "data_type": "text"
+        },
+        {
+          "name": "click_boost",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "view_boost",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "last_updated_date",
+          "description": null,
+          "data_type": "date"
+        }
+      ],
+      "depends_on": [
+        "seed.streaming_ads.placement_boost"
+      ]
+    },
+    {
+      "name": "dim_user",
+      "description": "An individual using the system either as a consumer or administrator",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_user",
+      "columns": [
+        {
+          "name": "user_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "user_id",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "signup_date",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "first_seen_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "last_seen_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "user_segment",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "age_bucket",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "primary_device_type",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "primary_os",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "country",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "region",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "city",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "is_kids_profile",
+          "description": "",
+          "data_type": "boolean"
+        },
+        {
+          "name": "effective_start_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "effective_start_ts",
+          "description": null,
+          "data_type": "timestamp_ntz"
+        },
+        {
+          "name": "effective_end_ts",
+          "description": null,
+          "data_type": "timestamp_ntz"
+        },
+        {
+          "name": "effective_end_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "is_current",
+          "description": null,
+          "data_type": "boolean"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_users"
+      ]
+    },
+    {
+      "name": "dim_device",
+      "description": "Hardware for consuming digital content",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_device",
+      "columns": [
+        {
+          "name": "device_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "user_id",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "device_type",
+          "description": "The type of device. Examples: mobile, tablet, desktop, tv",
+          "data_type": "text"
+        },
+        {
+          "name": "os",
+          "description": "The OS in a device. Examples: iOS, macOS, Android",
+          "data_type": "text"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_ad_events"
+      ]
+    },
+    {
+      "name": "dim_geo",
+      "description": "A geographical location along with the hierarchy it rolls up to",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_geo",
+      "columns": [
+        {
+          "name": "geo_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "country",
+          "description": "The two-digit ISO country code for the location",
+          "data_type": "text"
+        },
+        {
+          "name": "region",
+          "description": "The region for the location as defined by the country",
+          "data_type": "text"
+        },
+        {
+          "name": "city",
+          "description": "The name of the city",
+          "data_type": "text"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_ad_events"
+      ]
+    },
+    {
+      "name": "dim_content",
+      "description": "A unit of streaming content that can be viewed and selected",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_content",
+      "columns": [
+        {
+          "name": "content_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "content_id",
+          "description": "Identifer for a unit of streaming content",
+          "data_type": "text"
+        },
+        {
+          "name": "content_type",
+          "description": "Type of content, either movie, series or episode in a series",
+          "data_type": "text"
+        },
+        {
+          "name": "title",
+          "description": "The name given to an episode. It may not be unique",
+          "data_type": "text"
+        },
+        {
+          "name": "series_id",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "season_number",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "episode_number",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "genre",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "maturity_rating",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "duration_minutes",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "release_year",
+          "description": "",
+          "data_type": "number"
+        },
+        {
+          "name": "is_original",
+          "description": "",
+          "data_type": "boolean"
+        },
+        {
+          "name": "created_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "created_ts",
+          "description": null,
+          "data_type": "timestamp_ntz"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_content"
+      ]
+    },
+    {
+      "name": "dim_campaign",
+      "description": "A plan for changing the behavior of an organization's customer or potential customer via advertising",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_campaign",
+      "columns": [
+        {
+          "name": "campaign_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "campaign_id",
+          "description": "Identifer for a unique advertising campaign",
+          "data_type": "text"
+        },
+        {
+          "name": "advertiser_id",
+          "description": "Identifier for a unique advertiser",
+          "data_type": "text"
+        },
+        {
+          "name": "campaign_name",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "objective",
+          "description": "Purpose for the campaign. Examples: awareness, consideration, conversion",
+          "data_type": "text"
+        },
+        {
+          "name": "bid_strategy",
+          "description": "Optimization goal. Examples: CPM, CPC, CPA",
+          "data_type": "text"
+        },
+        {
+          "name": "start_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "end_date",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "daily_budget_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "total_budget_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "created_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "updated_date",
+          "description": null,
+          "data_type": "date"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_campaigns"
+      ]
+    },
+    {
+      "name": "fct_user_ads_daily",
+      "description": "",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "fct_user_ads_daily",
+      "columns": [
+        {
+          "name": "user_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "date_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "impressions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "clicks",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "revenue",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "total_view_ms",
+          "description": null,
+          "data_type": "number"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.fct_ad_event"
+      ]
+    },
+    {
+      "name": "fct_campaign_daily",
+      "description": "Daily summary of ad campaign performance",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "fct_campaign_daily",
+      "columns": [
+        {
+          "name": "campaign_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "date_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "impressions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "clicks",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "conversions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "click_through_conversions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "view_through_conversions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "revenue_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "cost_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "ctr",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "click_cvr",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "view_cvr",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "roas",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "loaded_at",
+          "description": null,
+          "data_type": "timestamp_ltz"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.fct_ad_event"
+      ]
+    },
+    {
+      "name": "dim_ad",
+      "description": "An advertisement, either a picture or a movie, as shown to a user in the content playback platform, generally paid for by an advertiser",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_ad",
+      "columns": [
+        {
+          "name": "ad_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "ad_id",
+          "description": "unique identifier for the ad",
+          "data_type": "text"
+        },
+        {
+          "name": "ad_format",
+          "description": "Categorization of ad based on where it is placed. Examples: video, bumper, etc.",
+          "data_type": "text"
+        },
+        {
+          "name": "creative_type",
+          "description": "Type of media or format. Examples: video, interactive_qr, brand_slate",
+          "data_type": "text"
+        },
+        {
+          "name": "duration_seconds",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "base_cpm_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "click_boost",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "is_interactive",
+          "description": null,
+          "data_type": "boolean"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_creatives"
+      ]
+    },
+    {
+      "name": "dim_time",
+      "description": "Categorization of periods within a day",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_time",
+      "columns": [
+        {
+          "name": "hour_of_day",
+          "description": "",
+          "data_type": "number"
+        },
+        {
+          "name": "time_of_day",
+          "description": "Categorization of period within day based on common schedule. Examples: morning",
+          "data_type": "text"
+        }
+      ],
+      "depends_on": []
+    },
+    {
+      "name": "fct_content_playback_session",
+      "description": "An instance of a user viewing content within a session. A user may view content more than once in the same session.",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "fct_content_playback_session",
+      "columns": [
+        {
+          "name": "playback_session_id",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "user_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "content_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "device_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "geo_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "date_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "hour_of_day",
+          "description": "",
+          "data_type": "number"
+        },
+        {
+          "name": "content_type",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "device_type",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "session_start_ts",
+          "description": null,
+          "data_type": "timestamp_ntz"
+        },
+        {
+          "name": "session_end_ts",
+          "description": null,
+          "data_type": "timestamp_ntz"
+        },
+        {
+          "name": "session_duration_minutes",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "content_duration_minutes",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "content_completion_ratio",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "is_binge",
+          "description": null,
+          "data_type": "boolean"
+        },
+        {
+          "name": "created_ts",
+          "description": null,
+          "data_type": "timestamp_ntz"
+        },
+        {
+          "name": "loaded_at",
+          "description": null,
+          "data_type": "timestamp_ltz"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_playback_sessions",
+        "model.streaming_ads.dim_user",
+        "model.streaming_ads.dim_content",
+        "model.streaming_ads.dim_device",
+        "model.streaming_ads.dim_geo",
+        "model.streaming_ads.dim_calendar"
+      ]
+    },
+    {
+      "name": "fct_content_engagement_daily",
+      "description": "",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "fct_content_engagement_daily",
+      "columns": [
+        {
+          "name": "content_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "geo_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "device_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "date_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "year",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "week",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "unique_viewers",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "num_sessions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "playback_minutes",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "playback_hours",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "num_completion_sessions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "num_binge_sessions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "loaded_at",
+          "description": null,
+          "data_type": "timestamp_ltz"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.fct_content_playback_session",
+        "model.streaming_ads.dim_calendar"
+      ]
+    },
+    {
+      "name": "fct_content_monetization_daily",
+      "description": "Daily financial metrics per content",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "fct_content_monetization_daily",
+      "columns": [
+        {
+          "name": "content_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "geo_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "device_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "date_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "year",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "week",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "impressions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "clicks",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "conversions",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "revenue_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "cost_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "revenue_per_playback_hour",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "ad_load",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "conversions_per_playback_hour",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "clicks_per_playback_hour",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "loaded_at",
+          "description": null,
+          "data_type": "timestamp_ltz"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.fct_ad_event",
+        "model.streaming_ads.dim_calendar",
+        "model.streaming_ads.fct_content_engagement_daily"
+      ]
+    },
+    {
+      "name": "fct_ad_event",
+      "description": "An ad to user event such as user being shown an ad (impression), user interacting with an ad (click), or user taking action because of an ad (conversion).",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "fct_ad_event",
+      "columns": [
+        {
+          "name": "event_id",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "session_id",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "event_type",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "is_billable",
+          "description": "",
+          "data_type": "boolean"
+        },
+        {
+          "name": "attribution_type",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "user_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "ad_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "campaign_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "device_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "content_key",
+          "description": null,
+          "data_type": "text"
+        },
+        {
+          "name": "placement_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "date_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "geo_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "event_ts",
+          "description": null,
+          "data_type": "timestamp_ntz"
+        },
+        {
+          "name": "event_date",
+          "description": null,
+          "data_type": "date"
+        },
+        {
+          "name": "view_duration_ms",
+          "description": null,
+          "data_type": "number"
+        },
+        {
+          "name": "revenue_usd",
+          "description": null,
+          "data_type": "float"
+        },
+        {
+          "name": "cost_usd",
+          "description": null,
+          "data_type": "float"
+        }
+      ],
+      "depends_on": [
+        "model.streaming_ads.stg_ad_events",
+        "model.streaming_ads.dim_user",
+        "model.streaming_ads.dim_ad",
+        "model.streaming_ads.dim_campaign",
+        "model.streaming_ads.dim_device",
+        "model.streaming_ads.dim_content",
+        "model.streaming_ads.dim_placement",
+        "model.streaming_ads.dim_calendar",
+        "model.streaming_ads.dim_geo"
+      ]
+    },
+    {
+      "name": "dim_calendar",
+      "description": "Hierarhical categorization of days in the calendar with designation as holidays",
+      "database": "STREAMING_ADS",
+      "schema": "streaming_ads_schema",
+      "alias": "dim_calendar",
+      "columns": [
+        {
+          "name": "date_key",
+          "description": "",
+          "data_type": "text"
+        },
+        {
+          "name": "calendar_date",
+          "description": "String version of date",
+          "data_type": "date"
+        },
+        {
+          "name": "day_of_week",
+          "description": "Named day of week. Examples: Monday, Tuesday",
+          "data_type": "number"
+        },
+        {
+          "name": "week",
+          "description": "Integer for the week of the year, from 1 to 52",
+          "data_type": "number"
+        },
+        {
+          "name": "month",
+          "description": "Named month of the year. Examples: January, February",
+          "data_type": "number"
+        },
+        {
+          "name": "quarter",
+          "description": "Integer for one of the four quarters in a year.\"",
+          "data_type": "number"
+        },
+        {
+          "name": "year",
+          "description": "Integer for the year. Examples: 2025, 2026",
+          "data_type": "number"
+        }
+      ],
+      "depends_on": []
+    }
+  ],
+  "relationships": [
+    {
+      "from_model": "fct_ad_event",
+      "from_column": "user_key",
+      "to_model": "dim_user",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_ad_event",
+      "from_column": "ad_key",
+      "to_model": "dim_ad",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_ad_event",
+      "from_column": "campaign_key",
+      "to_model": "dim_campaign",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_ad_event",
+      "from_column": "device_key",
+      "to_model": "dim_device",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_ad_event",
+      "from_column": "placement_key",
+      "to_model": "dim_placement",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_ad_event",
+      "from_column": "date_key",
+      "to_model": "dim_calendar",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_ad_event",
+      "from_column": "geo_key",
+      "to_model": "dim_geo",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_content_playback_session",
+      "from_column": "user_key",
+      "to_model": "dim_user",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_content_playback_session",
+      "from_column": "device_key",
+      "to_model": "dim_device",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_content_playback_session",
+      "from_column": "content_key",
+      "to_model": "dim_content",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_content_playback_session",
+      "from_column": "date_key",
+      "to_model": "dim_calendar",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_content_playback_session",
+      "from_column": "geo_key",
+      "to_model": "dim_geo",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_content_playback_session",
+      "from_column": "hour_of_day",
+      "to_model": "dim_time",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_model": "fct_campaign_daily",
+      "from_column": "date_key",
+      "to_model": "dim_calendar",
+      "relationship_type": "many_to_one"
+    }
+  ]
+}

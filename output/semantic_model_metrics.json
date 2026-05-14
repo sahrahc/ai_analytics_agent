@@ -1,0 +1,233 @@
+[
+  {
+    "model": "fct_ad_event",
+    "metric_name": "revenue_usd",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": null,
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_ad_event",
+    "metric_name": "cost_usd",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": null,
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_ad_event",
+    "metric_name": "view_duration_ms",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": null,
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_content_playback_session",
+    "metric_name": "session_duration_minutes",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": null,
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_content_playback_session",
+    "metric_name": "content_duration_minutes",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": null,
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_content_playback_session",
+    "metric_name": "active_users",
+    "metric_type": "simple",
+    "aggregation": "count_distinct",
+    "expression": "user_id",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": "The count of users who recently ad activity"
+  },
+  {
+    "model": "fct_content_playback_session",
+    "metric_name": "is_binge",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": null,
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "impressions",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "impressions",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "clicks",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "impressions",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "conversions",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "conversions",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "click_through_conversions",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "click_through_conversions",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "view_through_conversions",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "view_through_conversions",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "revenue_usd",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "revenue_usd",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "cost_usd",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "cost_usd",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "click_cvr",
+    "metric_type": "ratio",
+    "aggregation": null,
+    "expression": null,
+    "numerator": "clicks",
+    "denominator": "impressions",
+    "label": "Conversion Rate with Click Attribution",
+    "description": "An instance of a user taking desired action after interacting with an ad"
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "ctr",
+    "metric_type": "ratio",
+    "aggregation": null,
+    "expression": null,
+    "numerator": "clicks",
+    "denominator": "impressions",
+    "label": "Click Through Rate",
+    "description": "An instance of the user clicking or taking other action on an ad"
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "cvr",
+    "metric_type": "ratio",
+    "aggregation": null,
+    "expression": null,
+    "numerator": "conversions",
+    "denominator": "clicks",
+    "label": "Conversion Rate",
+    "description": "An instance of the user taking desired action because of an ad"
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "view_cvr",
+    "metric_type": "ratio",
+    "aggregation": null,
+    "expression": null,
+    "numerator": "clicks",
+    "denominator": "impressions",
+    "label": "Conversion Rate with Impression Attribution",
+    "description": "An instance of a user taking desired action after viewing an ad"
+  },
+  {
+    "model": "fct_campaign_daily",
+    "metric_name": "roas",
+    "metric_type": "ratio",
+    "aggregation": null,
+    "expression": null,
+    "numerator": "revenue_usd",
+    "denominator": "cost_usd",
+    "label": "Return on Ad Spend",
+    "description": "A measure of how effectively the marketing budget performs (ad efficiency)"
+  },
+  {
+    "model": "fct_content_monetization_daily",
+    "metric_name": "playback_hours",
+    "metric_type": "simple",
+    "aggregation": "sum",
+    "expression": "playback_hours",
+    "numerator": null,
+    "denominator": null,
+    "label": null,
+    "description": null
+  },
+  {
+    "model": "fct_content_monetization_daily",
+    "metric_name": "ad_load_per_hour",
+    "metric_type": "ratio",
+    "aggregation": null,
+    "expression": null,
+    "numerator": "impressions",
+    "denominator": "playback_hours",
+    "label": "Ad Load",
+    "description": "Ad load assuming aveage of 30 second ads"
+  }
+]

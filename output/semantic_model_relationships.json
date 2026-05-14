@@ -1,0 +1,86 @@
+[
+  {
+    "from_model": "fct_ad_event",
+    "from_column": "user_key",
+    "to_model": "dim_user",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_ad_event",
+    "from_column": "ad_key",
+    "to_model": "dim_ad",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_ad_event",
+    "from_column": "campaign_key",
+    "to_model": "dim_campaign",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_ad_event",
+    "from_column": "device_key",
+    "to_model": "dim_device",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_ad_event",
+    "from_column": "placement_key",
+    "to_model": "dim_placement",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_ad_event",
+    "from_column": "date_key",
+    "to_model": "dim_calendar",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_ad_event",
+    "from_column": "geo_key",
+    "to_model": "dim_geo",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_content_playback_session",
+    "from_column": "user_key",
+    "to_model": "dim_user",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_content_playback_session",
+    "from_column": "device_key",
+    "to_model": "dim_device",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_content_playback_session",
+    "from_column": "content_key",
+    "to_model": "dim_content",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_content_playback_session",
+    "from_column": "date_key",
+    "to_model": "dim_calendar",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_content_playback_session",
+    "from_column": "geo_key",
+    "to_model": "dim_geo",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_content_playback_session",
+    "from_column": "hour_of_day",
+    "to_model": "dim_time",
+    "relationship_type": "many_to_one"
+  },
+  {
+    "from_model": "fct_campaign_daily",
+    "from_column": "date_key",
+    "to_model": "dim_calendar",
+    "relationship_type": "many_to_one"
+  }
+]

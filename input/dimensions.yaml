@@ -1,0 +1,288 @@
+version: 0.1
+
+models:
+
+#################################################################
+# semantic specifications for dimension models, which specifies:
+# 
+# 1. data quality and
+# 2. semantics for how data is aggregated (and joined if any 
+#    joins needed)
+#################################################################
+
+  - name: dim_ad
+    semantic_model: 
+      enabled: true
+      name: ad_dimension_semantic_model
+    description:
+      An advertisement, either a picture or a movie, as shown to a user
+      in the content playback platform, generally paid for by an advertiser
+    
+    columns:
+      - name: ad_id
+        description: unique identifier for the ad
+        entity:
+          type: primary
+          name: dim_ad
+        data_tests:
+          - not_null
+        
+      - name: ad_format
+        description: "Categorization of ad based on where it is placed. Examples: video, bumper, etc."
+        dimension: categorical
+        data_tests:
+          - not_null
+
+      - name: creative_type
+        description: "Type of media or format. Examples: video, interactive_qr, brand_slate"
+        dimension: categorical
+        data_tests:
+          - not_null
+
+#################################################################
+
+  - name: dim_calendar
+    semantic_model: 
+      enabled: true
+      name: calendar_semantic_model
+    description:
+      Hierarhical categorization of days in the calendar with designation as holidays
+
+    columns:
+      - name: date_key
+        entity: 
+          type: primary
+          name: dim_calendar
+        
+      - name: calendar_date
+        dimension: categorical
+        description: "String version of date"
+        data_tests:
+          - unique
+          - not_null
+
+      - name: day_of_week
+        dimension: categorical
+        description: "Named day of week. Examples: Monday, Tuesday"
+
+      - name: week
+        dimension: categorical
+        description: "Integer for the week of the year, from 1 to 52"
+
+      - name: month
+        dimension: categorical
+        description: "Named month of the year. Examples: January, February"
+
+      - name: quarter
+        dimension: categorical
+        description: Integer for one of the four quarters in a year."
+      
+      - name: year
+        dimension: categorical
+        description: "Integer for the year. Examples: 2025, 2026"
+
+#################################################################
+
+  - name: dim_campaign
+    semantic_model: 
+      enabled: true
+      name: advertising_campaign_semantic_model
+    description:
+      A plan for changing the behavior of an organization's customer or potential customer via advertising
+
+    columns:
+      - name: campaign_id
+        entity:
+          type: primary
+          name: dim_campaign
+        description:
+          Identifer for a unique advertising campaign
+
+      - name: advertiser_id
+        # this is a foreign key but not added as relationship not needed
+        description: "Identifier for a unique advertiser"
+        data_tests:
+          - not_null
+          
+      - name: objective
+        dimension: categorical
+        description: "Purpose for the campaign. Examples: awareness, consideration, conversion"
+
+      - name: bid_strategy
+        dimension: categorical
+        description: "Optimization goal. Examples: CPM, CPC, CPA"
+
+    metrics:
+      - name: daily_budget_usd
+        type: simple
+        agg: sum
+        description: "Max budget for the day"
+      - name: total_budget_usd
+        type: simple
+        agg: sum
+        description: "Total budget for the entire campaign"
+
+#################################################################
+
+  - name: dim_content
+    semantic_model: 
+      enabled: true
+      name: streaming_content_semantic_model
+    description:
+      A unit of streaming content that can be viewed and selected
+
+    columns:
+      - name: content_id
+        entity:
+          type: primary
+          name: dim_content
+        description:
+          Identifer for a unit of streaming content
+      - name: content_type
+        dimension: categorical
+        description: "Type of content, either movie, series or episode in a series"
+      - name: title
+        description: "The name given to an episode. It may not be unique"
+        data_tests:
+          - not_null
+      - name: genre
+        dimension: categorical
+      - name: is_original
+        dimension: categorical
+      - name: release_year  
+        dimension: categorical
+    metrics:
+      - name: duration_minutes
+        type: simple
+        agg: sum
+        description: "The length in minutes of the content"
+      - name: maturity_rating
+        type: simple
+        agg: average
+        description: "Max budget for the day"
+
+#################################################################
+
+  - name: dim_device
+    semantic_model: 
+      enabled: true
+      name: digital_device_semantic_model
+    description:
+      Hardware for consuming digital content
+    
+    columns:
+      - name: user_id
+        # entity but not enforcing relationships
+        data_tests:
+          - not_null
+          
+      - name: device_type
+        dimension: categorical
+        description: "The type of device. Examples: mobile, tablet, desktop, tv"
+        data_tests:
+          - not_null
+      
+      - name: os
+        dimension: categorical
+        description: "The OS in a device. Examples: iOS, macOS, Android"
+        data_tests:
+          - not_null
+
+#################################################################
+
+  - name: dim_geo
+    semantic_model: 
+      enabled: true
+      name: geo_semantic_model
+    description:
+      "A geographical location along with the hierarchy it rolls up to"
+
+    columns:
+      - name: country
+        dimension: categorical
+        description: "The two-digit ISO country code for the location"
+        data_tests:
+          - not_null
+          
+      - name: region
+        dimension: categorical
+        description: "The region for the location as defined by the country"
+        data_tests:
+          - not_null
+
+      - name: city
+        dimension: categorical
+        description: "The name of the city"
+        data_tests:
+          - not_null
+
+#################################################################
+
+  - name: dim_placement
+    semantic_model: 
+      enabled: true
+      name: ad_placement_semantic_model
+    description:
+      Location in playback app where ad may be placed
+
+    columns:
+      - name: surface
+        dimension: categorical
+        description: "The component within the playback app. Examples: ui, player"
+        data_tests:
+          - not_null
+          
+      - name: placement
+        dimension: categorical
+        description: "The subcomponent of the playback app in relation to the player. Examples: pause_screen, post_roll"
+        data_tests:
+          - not_null
+
+      - name: position
+        dimension: categorical
+        description: "The component within the playback app in relation to the content. Examples: post_role, home_sponsorship"
+        data_tests:
+          - not_null
+
+#################################################################
+
+  - name: dim_time
+    semantic_model: 
+      enabled: true
+      name: time_semantic_model
+    description:
+      Categorization of periods within a day
+    
+    columns:
+      - name: hour_of_day
+        entity:
+          type: primary
+          name: dim_time
+      
+      - name: time_of_day
+        dimension: categorical
+        description: "Categorization of period within day based on common schedule. Examples: morning"
+
+#################################################################
+
+  - name: dim_user
+    semantic_model: 
+      enabled: true
+      name: user_semantic_model
+    description:
+      An individual using the system either as a consumer or administrator
+
+    columns:
+      - name: user_id
+        # entity but not defined as relationship not used
+        data_tests:
+          - not_null
+          
+      - name: user_segment
+        dimension: categorical
+
+      - name: age_bucket
+        dimension: categorical
+
+      - name: is_kids_profile 
+        dimension: categorical
