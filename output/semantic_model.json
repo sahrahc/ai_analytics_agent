@@ -1,6 +1,6 @@
 {
-  "models": [
-    {
+  "models": {
+    "dim_placement": {
       "name": "dim_placement",
       "description": "Location in playback app where ad may be placed",
       "database": "STREAMING_ADS",
@@ -47,7 +47,7 @@
         "seed.streaming_ads.placement_boost"
       ]
     },
-    {
+    "dim_user": {
       "name": "dim_user",
       "description": "An individual using the system either as a consumer or administrator",
       "database": "STREAMING_ADS",
@@ -149,7 +149,7 @@
         "model.streaming_ads.stg_users"
       ]
     },
-    {
+    "dim_device": {
       "name": "dim_device",
       "description": "Hardware for consuming digital content",
       "database": "STREAMING_ADS",
@@ -181,7 +181,7 @@
         "model.streaming_ads.stg_ad_events"
       ]
     },
-    {
+    "dim_geo": {
       "name": "dim_geo",
       "description": "A geographical location along with the hierarchy it rolls up to",
       "database": "STREAMING_ADS",
@@ -213,7 +213,7 @@
         "model.streaming_ads.stg_ad_events"
       ]
     },
-    {
+    "dim_content": {
       "name": "dim_content",
       "description": "A unit of streaming content that can be viewed and selected",
       "database": "STREAMING_ADS",
@@ -295,7 +295,7 @@
         "model.streaming_ads.stg_content"
       ]
     },
-    {
+    "dim_campaign": {
       "name": "dim_campaign",
       "description": "A plan for changing the behavior of an organization's customer or potential customer via advertising",
       "database": "STREAMING_ADS",
@@ -367,7 +367,7 @@
         "model.streaming_ads.stg_campaigns"
       ]
     },
-    {
+    "fct_user_ads_daily": {
       "name": "fct_user_ads_daily",
       "description": "",
       "database": "STREAMING_ADS",
@@ -409,7 +409,7 @@
         "model.streaming_ads.fct_ad_event"
       ]
     },
-    {
+    "fct_campaign_daily": {
       "name": "fct_campaign_daily",
       "description": "Daily summary of ad campaign performance",
       "database": "STREAMING_ADS",
@@ -491,7 +491,7 @@
         "model.streaming_ads.fct_ad_event"
       ]
     },
-    {
+    "dim_ad": {
       "name": "dim_ad",
       "description": "An advertisement, either a picture or a movie, as shown to a user in the content playback platform, generally paid for by an advertiser",
       "database": "STREAMING_ADS",
@@ -543,7 +543,7 @@
         "model.streaming_ads.stg_creatives"
       ]
     },
-    {
+    "dim_time": {
       "name": "dim_time",
       "description": "Categorization of periods within a day",
       "database": "STREAMING_ADS",
@@ -563,7 +563,7 @@
       ],
       "depends_on": []
     },
-    {
+    "fct_content_playback_session": {
       "name": "fct_content_playback_session",
       "description": "An instance of a user viewing content within a session. A user may view content more than once in the same session.",
       "database": "STREAMING_ADS",
@@ -665,7 +665,7 @@
         "model.streaming_ads.dim_calendar"
       ]
     },
-    {
+    "fct_content_engagement_daily": {
       "name": "fct_content_engagement_daily",
       "description": "",
       "database": "STREAMING_ADS",
@@ -743,7 +743,7 @@
         "model.streaming_ads.dim_calendar"
       ]
     },
-    {
+    "fct_content_monetization_daily": {
       "name": "fct_content_monetization_daily",
       "description": "Daily financial metrics per content",
       "database": "STREAMING_ADS",
@@ -837,7 +837,7 @@
         "model.streaming_ads.fct_content_engagement_daily"
       ]
     },
-    {
+    "fct_ad_event": {
       "name": "fct_ad_event",
       "description": "An ad to user event such as user being shown an ad (impression), user interacting with an ad (click), or user taking action because of an ad (conversion).",
       "database": "STREAMING_ADS",
@@ -947,9 +947,9 @@
         "model.streaming_ads.dim_geo"
       ]
     },
-    {
+    "dim_calendar": {
       "name": "dim_calendar",
-      "description": "Hierarhical categorization of days in the calendar with designation as holidays",
+      "description": "Hierarchical categorization of days in the calendar with designation as holidays",
       "database": "STREAMING_ADS",
       "schema": "streaming_ads_schema",
       "alias": "dim_calendar",
@@ -981,7 +981,7 @@
         },
         {
           "name": "quarter",
-          "description": "Integer for one of the four quarters in a year.\"",
+          "description": "Integer for one of the four quarters in a year.",
           "data_type": "number"
         },
         {
@@ -992,7 +992,7 @@
       ],
       "depends_on": []
     }
-  ],
+  },
   "relationships": [
     {
       "from_model": "fct_ad_event",

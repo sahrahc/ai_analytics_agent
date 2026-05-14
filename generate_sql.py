@@ -2,22 +2,24 @@ import json
 from datetime import datetime
 from urllib import response
 
-from ai_api_client import client
-from langgraph.graph import StateGraph
-from GraphState import GraphState
+from state import GraphState
+from langchain_core.runnables import RunnableConfig
+
+from openai import OpenAI
 
 # -----------------------------------
 # Generate SQL using LLM
 # -----------------------------------
-OUTPUT_PATH = "generated_sql.sql"
-LOG_FILE = "openai_response.log"
+OUTPUT_PATH = "output/generated_sql.sql"
+LOG_FILE = "output/openai_response.log"
+
 
 # Build compact context
-def generate_sql(state: GraphState):
-    
+def generate_sql(state: GraphState, config: RunnableConfig):
+
     context = {
-            "metric": state["metric_definition"],
-            "semantic_model": state["semantic_model"]
+        "analysis_request": state["analysis_request"],
+        "semantic_model": state["semantic_model"],
     }
 
     system_prompt = """
@@ -34,20 +36,25 @@ def generate_sql(state: GraphState):
     """
 
     user_prompt = f"""
-    Generate SQL for metric:
+    Generate SQL for the following analysis request, by identifying the correct set of metrics
+    using the provided semantic context:
 
-    {state['metric_name']}
+    {state['analysis_request']}
 
     Context:
     {json.dumps(state['prompt_context'], indent=2)}
     """
 
+    openai_client = config.get("configurable", {}).get("openai_client")
+    if not openai_client:
+        raise RuntimeError("OpenAI client not found in config")
+
     # POST https://api.openai.com/v1/responses
-    response = client.responses.create(
+    response = openai_client.responses.create(
         model="gpt-5-mini",
         reasoning={
             # "effort": "medium"
-            "effort": "low" # for development
+            "effort": "low"  # for development
         },
         text={
             "format": {
@@ -56,74 +63,48 @@ def generate_sql(state: GraphState):
                 "schema": {
                     "type": "object",
                     "properties": {
-                        "metric_name": {
-                            "type": "string"
-                        },
-                        "reasoning": {
-                            "type": "string"
-                        },
-                        "sql": {
-                            "type": "string"
-                        },
-                        "tables_used": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "columns_used": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "warnings": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        }   
+                        "analysis_request": {"type": "string"},
+                        "reasoning": {"type": "string"},
+                        "sql": {"type": "string"},
+                        "tables_used": {"type": "array", "items": {"type": "string"}},
+                        "columns_used": {"type": "array", "items": {"type": "string"}},
+                        "warnings": {"type": "array", "items": {"type": "string"}},
                     },
                     "required": [
-                        "metric_name",
+                        "analysis_request",
                         "reasoning",
                         "sql",
                         "tables_used",
                         "columns_used",
-                        "warnings"
+                        "warnings",
                     ],
-                    "additionalProperties": False
-                }
+                    "additionalProperties": False,
+                },
             }
         },
         input=[
-            {
-                "role": "system",
-                "content": system_prompt
-            },
-            {
-                "role": "user",
-                "content": user_prompt
-            }
-        ]
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
     )
-    
+
     timestamp = datetime.now()
-    
+
+    # TODO create class and reuse for consistent logging
     log_entry = {
         "timestamp": timestamp,
         "response_id": response.id,
         "model": response.model,
         "response_text": response.output_text,
-        "full_response": response.model_dump()
+        "full_response": response.model_dump(),
     }
 
     with open(LOG_FILE, "a") as f:
         f.write(json.dumps(log_entry, indent=2, default=str))
         f.write("\n\n")
 
-    print(f"Response logged to {LOG_FILE}")
-    
+    print(f"LLM Response logged to {LOG_FILE}")
+
     # SQL and reasoning stored in output file
     raw_json_string = response.output_text
 
@@ -132,7 +113,7 @@ def generate_sql(state: GraphState):
         parsed_data = json.loads(raw_json_string)
 
         # 3. Access individual schema fields safely
-        metric = parsed_data.get("metric_name")
+        analysis_request = parsed_data.get("analysis_request")
         reasoning = parsed_data.get("reasoning")
         sql_query = parsed_data.get("sql")
         tables = parsed_data.get("tables_used", [])
@@ -141,7 +122,7 @@ def generate_sql(state: GraphState):
 
         with open(OUTPUT_PATH, "a") as f:
             f.write('"""')
-            f.write(f"Metric: {metric}\n")
+            f.write(f"Analysis Request: {analysis_request}\n")
             f.write(f"Reasoning: {reasoning}\n")
             f.write(f"Tables Used: {tables}\n")
             f.write(f"Columns Used: {columns}\n")
@@ -154,8 +135,6 @@ def generate_sql(state: GraphState):
     except json.JSONDecodeError as e:
         print(f"Failed to parse response as JSON: {e}")
 
-    print('response from chatbot API: ', sql_query)
+    print("response from chatbot API: ", sql_query)
 
-    return {
-        "sql": sql_query
-    }
+    return {"sql": sql_query}

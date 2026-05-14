@@ -538,3 +538,138 @@
   }
 }
 
+{
+  "timestamp": "2026-05-14 12:25:14.088192",
+  "response_id": "resp_0109a1d38103865e006a05f75d17c881969b4e3972bc009780",
+  "model": "gpt-5-mini-2025-08-07",
+  "response_text": "{\n  \"analysis_request\": \"Find historical roas by week\",\n  \"reasoning\": \"We have a roas metric stored on fct_campaign_daily (column roas) and revenue_usd / cost_usd columns on the same table. To compute historical ROAS by calendar week we should aggregate daily rows to weekly level using the dim_calendar relationship (fct_campaign_daily.date_key -> dim_calendar.date_key). To avoid averaging per-day ROAS (which is biased), compute weekly ROAS as sum(revenue_usd) / sum(cost_usd). Handle zero cost with NULLIF to avoid division-by-zero. Return year and week from dim_calendar and order chronologically.\",\n  \"sql\": \"SELECT\\n  c.year AS year,\\n  c.week AS week,\\n  SUM(f.revenue_usd) AS revenue_usd_weekly,\\n  SUM(f.cost_usd) AS cost_usd_weekly,\\n  CASE\\n    WHEN SUM(f.cost_usd) = 0 THEN NULL\\n    ELSE SUM(f.revenue_usd) / NULLIF(SUM(f.cost_usd), 0)\\n  END AS roas_weekly\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily f\\nJOIN STREAMING_ADS.streaming_ads_schema.dim_calendar c\\n  ON f.date_key = c.date_key\\nGROUP BY\\n  c.year,\\n  c.week\\nORDER BY\\n  c.year,\\n  c.week;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\",\n    \"STREAMING_ADS.streaming_ads_schema.dim_calendar\"\n  ],\n  \"columns_used\": [\n    \"fct_campaign_daily.date_key\",\n    \"fct_campaign_daily.revenue_usd\",\n    \"fct_campaign_daily.cost_usd\",\n    \"dim_calendar.date_key\",\n    \"dim_calendar.year\",\n    \"dim_calendar.week\"\n  ],\n  \"warnings\": [\n    \"Weeks spanning year boundaries are grouped by the year value in dim_calendar. If you want ISO-week semantics or a different week definition, confirm dim_calendar.week semantics.\",\n    \"Rows with SUM(cost_usd) = 0 will yield NULL for roas_weekly to avoid division by zero.\"\n  ]\n}",
+  "full_response": {
+    "id": "resp_0109a1d38103865e006a05f75d17c881969b4e3972bc009780",
+    "created_at": 1778775901.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5-mini-2025-08-07",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_0109a1d38103865e006a05f75deccc8196af4f407962d7cc7d",
+        "summary": [],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": null
+      },
+      {
+        "id": "msg_0109a1d38103865e006a05f7634f7c8196b6bed656dd6dbde8",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\n  \"analysis_request\": \"Find historical roas by week\",\n  \"reasoning\": \"We have a roas metric stored on fct_campaign_daily (column roas) and revenue_usd / cost_usd columns on the same table. To compute historical ROAS by calendar week we should aggregate daily rows to weekly level using the dim_calendar relationship (fct_campaign_daily.date_key -> dim_calendar.date_key). To avoid averaging per-day ROAS (which is biased), compute weekly ROAS as sum(revenue_usd) / sum(cost_usd). Handle zero cost with NULLIF to avoid division-by-zero. Return year and week from dim_calendar and order chronologically.\",\n  \"sql\": \"SELECT\\n  c.year AS year,\\n  c.week AS week,\\n  SUM(f.revenue_usd) AS revenue_usd_weekly,\\n  SUM(f.cost_usd) AS cost_usd_weekly,\\n  CASE\\n    WHEN SUM(f.cost_usd) = 0 THEN NULL\\n    ELSE SUM(f.revenue_usd) / NULLIF(SUM(f.cost_usd), 0)\\n  END AS roas_weekly\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily f\\nJOIN STREAMING_ADS.streaming_ads_schema.dim_calendar c\\n  ON f.date_key = c.date_key\\nGROUP BY\\n  c.year,\\n  c.week\\nORDER BY\\n  c.year,\\n  c.week;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\",\n    \"STREAMING_ADS.streaming_ads_schema.dim_calendar\"\n  ],\n  \"columns_used\": [\n    \"fct_campaign_daily.date_key\",\n    \"fct_campaign_daily.revenue_usd\",\n    \"fct_campaign_daily.cost_usd\",\n    \"dim_calendar.date_key\",\n    \"dim_calendar.year\",\n    \"dim_calendar.week\"\n  ],\n  \"warnings\": [\n    \"Weeks spanning year boundaries are grouped by the year value in dim_calendar. If you want ISO-week semantics or a different week definition, confirm dim_calendar.week semantics.\",\n    \"Rows with SUM(cost_usd) = 0 will yield NULL for roas_weekly to avoid division by zero.\"\n  ]\n}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1778775913.0,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "effort": "low",
+      "generate_summary": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "sql_generation_response",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "analysis_request": {
+              "type": "string"
+            },
+            "reasoning": {
+              "type": "string"
+            },
+            "sql": {
+              "type": "string"
+            },
+            "tables_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "columns_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "analysis_request",
+            "reasoning",
+            "sql",
+            "tables_used",
+            "columns_used",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 6730,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 804,
+      "output_tokens_details": {
+        "reasoning_tokens": 320
+      },
+      "total_tokens": 7534
+    },
+    "user": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "moderation": null,
+    "presence_penalty": 0.0,
+    "store": true
+  }
+}
+

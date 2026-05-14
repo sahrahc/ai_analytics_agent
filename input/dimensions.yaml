@@ -46,7 +46,7 @@ models:
       enabled: true
       name: calendar_semantic_model
     description:
-      Hierarhical categorization of days in the calendar with designation as holidays
+      Hierarchical categorization of days in the calendar with designation as holidays
 
     columns:
       - name: date_key
@@ -75,7 +75,7 @@ models:
 
       - name: quarter
         dimension: categorical
-        description: Integer for one of the four quarters in a year."
+        description: "Integer for one of the four quarters in a year."
       
       - name: year
         dimension: categorical
@@ -95,8 +95,7 @@ models:
         entity:
           type: primary
           name: dim_campaign
-        description:
-          Identifer for a unique advertising campaign
+        description: "Identifer for a unique advertising campaign"
 
       - name: advertiser_id
         # this is a foreign key but not added as relationship not needed
@@ -136,8 +135,7 @@ models:
         entity:
           type: primary
           name: dim_content
-        description:
-          Identifer for a unit of streaming content
+        description: "Identifer for a unit of streaming content"
       - name: content_type
         dimension: categorical
         description: "Type of content, either movie, series or episode in a series"

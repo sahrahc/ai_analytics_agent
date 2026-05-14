@@ -1,0 +1,46 @@
+[project]
+name = "ai_analytics_agent"
+version = "0.1.0"
+description = "A sequential LangGraph agent integrated with Snowflake database persistence"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Sahrah Marcantonio", github = "sahrahc" }
+]
+
+# Direct, top-level dependencies only (loose version tracking)
+dependencies = [
+    "langgraph>=1.2.0",
+    "langchain-core>=1.4.0",
+    "langchain-openai>=1.2.0",         # Added for native LangChain/LangGraph OpenAI bindings
+    "openai>=1.0.0",                   # Added for the core OpenAI Python SDK
+    "snowflake-connector-python>=3.7.0", # Standard connection package
+    "python-dotenv>=1.0.1",
+    "sqlglot>=30.8.0",                # Added for SQL parsing and validation
+]
+
+[dependency-groups]
+# Development-only tools isolated from production builds
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",
+    "mypy>=1.9.0",
+]
+
+[tool.ruff]
+# Single source of truth for code quality and formatting configurations
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W"]
+ignore = []
+
+[tool.mypy]
+# Configuration for strict static type checking
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+mypy_path = "."
+namespace_packages = true
+explicit_package_bases = true

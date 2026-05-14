@@ -2,13 +2,13 @@
     "metadata": {
         "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v12.json",
         "dbt_version": "2026.4.21+bb1ffc4",
-        "generated_at": "2026-05-13T22:07:37.667845Z",
-        "invocation_id": "0b5c5514-06db-47fb-b193-471f5738c520",
+        "generated_at": "2026-05-14T18:08:05.686805Z",
+        "invocation_id": "af344e24-0249-4240-866a-e43b0b1bbe6a",
         "invocation_started_at": "2026-05-07T17:32:31.413400+00:00",
         "env": {},
         "project_name": "streaming_ads",
         "project_id": "f98cc423c6f07b7b63446e38079dbac3",
-        "user_id": "103d8444-d052-4da4-a27d-5537a550a2d2",
+        "user_id": "b231822a-c323-4fde-a702-f6620b7cc5a5",
         "send_anonymous_usage_stats": true,
         "adapter_type": "snowflake",
         "quoting": {
@@ -8655,7 +8655,7 @@
                 "freshness": null
             },
             "tags": [],
-            "description": "Hierarhical categorization of days in the calendar with designation as holidays",
+            "description": "Hierarchical categorization of days in the calendar with designation as holidays",
             "columns": {
                 "date_key": {
                     "name": "date_key",
@@ -8742,7 +8742,7 @@
                 },
                 "quarter": {
                     "name": "quarter",
-                    "description": "Integer for one of the four quarters in a year.\"",
+                    "description": "Integer for one of the four quarters in a year.",
                     "meta": {},
                     "data_type": null,
                     "constraints": [],
@@ -8784,7 +8784,7 @@
             "unrendered_config": {
                 "materialized": "table"
             },
-            "created_at": 1778709849.4576113,
+            "created_at": 1778782065.6677697,
             "relation_name": "STREAMING_ADS.streaming_ads_schema.dim_calendar",
             "raw_code": "with cte_date_spine as (\n   {{ dbt_utils.date_spine(\n    datepart=\"day\",\n    start_date=\"cast('2025-01-01' as date)\",\n    end_date=\"current_date\"\n) }}\n)\nselect\n    -- unique identifier is the string version of the date\n    cast(date_day as string) as date_key,\n    date_day as calendar_date,\n    extract(dow from date_day) as day_of_week,\n    extract(week from date_day) as week,\n    extract(month from date_day) as month,\n    extract(quarter from date_day) as quarter,\n    extract(year from date_day) as year\nfrom cte_date_spine",
             "doc_blocks": [],
@@ -8801,7 +8801,7 @@
             },
             "compiled_path": "target/compiled/streaming_ads/models/dimensions/dim_calendar.sql",
             "compiled": true,
-            "compiled_code": "with cte_date_spine as (\n   \n\n\n\n\n\nwith rawdata as (\n\n    \n\n    \n\n    with p as (\n        select 0 as generated_number union all select 1\n    ), unioned as (\n\n    select\n\n    \n    p0.generated_number * power(2, 0)\n     + \n    \n    p1.generated_number * power(2, 1)\n     + \n    \n    p2.generated_number * power(2, 2)\n     + \n    \n    p3.generated_number * power(2, 3)\n     + \n    \n    p4.generated_number * power(2, 4)\n     + \n    \n    p5.generated_number * power(2, 5)\n     + \n    \n    p6.generated_number * power(2, 6)\n     + \n    \n    p7.generated_number * power(2, 7)\n     + \n    \n    p8.generated_number * power(2, 8)\n    \n    \n    + 1\n    as generated_number\n\n    from\n\n    \n    p as p0\n     cross join \n    \n    p as p1\n     cross join \n    \n    p as p2\n     cross join \n    \n    p as p3\n     cross join \n    \n    p as p4\n     cross join \n    \n    p as p5\n     cross join \n    \n    p as p6\n     cross join \n    \n    p as p7\n     cross join \n    \n    p as p8\n    \n    \n\n    )\n\n    select *\n    from unioned\n    where generated_number <= 497\n    order by generated_number\n\n\n\n),\n\nall_periods as (\n\n    select (\n        \n\n    dateadd(\n        day,\n        row_number() over (order by generated_number) - 1,\n        cast('2025-01-01' as date)\n        )\n\n\n    ) as date_day\n    from rawdata\n\n),\n\nfiltered as (\n\n    select *\n    from all_periods\n    where date_day <= current_date\n\n)\n\nselect * from filtered\n\n\n)\nselect\n    -- unique identifier is the string version of the date\n    cast(date_day as string) as date_key,\n    date_day as calendar_date,\n    extract(dow from date_day) as day_of_week,\n    extract(week from date_day) as week,\n    extract(month from date_day) as month,\n    extract(quarter from date_day) as quarter,\n    extract(year from date_day) as year\nfrom cte_date_spine",
+            "compiled_code": "with cte_date_spine as (\n   \n\n\n\n\n\nwith rawdata as (\n\n    \n\n    \n\n    with p as (\n        select 0 as generated_number union all select 1\n    ), unioned as (\n\n    select\n\n    \n    p0.generated_number * power(2, 0)\n     + \n    \n    p1.generated_number * power(2, 1)\n     + \n    \n    p2.generated_number * power(2, 2)\n     + \n    \n    p3.generated_number * power(2, 3)\n     + \n    \n    p4.generated_number * power(2, 4)\n     + \n    \n    p5.generated_number * power(2, 5)\n     + \n    \n    p6.generated_number * power(2, 6)\n     + \n    \n    p7.generated_number * power(2, 7)\n     + \n    \n    p8.generated_number * power(2, 8)\n    \n    \n    + 1\n    as generated_number\n\n    from\n\n    \n    p as p0\n     cross join \n    \n    p as p1\n     cross join \n    \n    p as p2\n     cross join \n    \n    p as p3\n     cross join \n    \n    p as p4\n     cross join \n    \n    p as p5\n     cross join \n    \n    p as p6\n     cross join \n    \n    p as p7\n     cross join \n    \n    p as p8\n    \n    \n\n    )\n\n    select *\n    from unioned\n    where generated_number <= 498\n    order by generated_number\n\n\n\n),\n\nall_periods as (\n\n    select (\n        \n\n    dateadd(\n        day,\n        row_number() over (order by generated_number) - 1,\n        cast('2025-01-01' as date)\n        )\n\n\n    ) as date_day\n    from rawdata\n\n),\n\nfiltered as (\n\n    select *\n    from all_periods\n    where date_day <= current_date\n\n)\n\nselect * from filtered\n\n\n)\nselect\n    -- unique identifier is the string version of the date\n    cast(date_day as string) as date_key,\n    date_day as calendar_date,\n    extract(dow from date_day) as day_of_week,\n    extract(week from date_day) as week,\n    extract(month from date_day) as month,\n    extract(quarter from date_day) as quarter,\n    extract(year from date_day) as year\nfrom cte_date_spine",
             "extra_ctes_injected": true,
             "extra_ctes": [],
             "contract": {
@@ -8868,7 +8868,7 @@
             "patch_path": null,
             "build_path": null,
             "unrendered_config": {},
-            "created_at": 1778709849.5458772,
+            "created_at": 1778782065.7575815,
             "relation_name": null,
             "raw_code": "{{ test_unique(**_dbt_generic_test_kwargs) }}",
             "doc_blocks": [],
@@ -8963,7 +8963,7 @@
             "patch_path": null,
             "build_path": null,
             "unrendered_config": {},
-            "created_at": 1778709849.5476992,
+            "created_at": 1778782065.7594783,
             "relation_name": null,
             "raw_code": "{{ test_not_null(**_dbt_generic_test_kwargs) }}",
             "doc_blocks": [],

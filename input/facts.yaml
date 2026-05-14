@@ -2,9 +2,9 @@ models:
   # =====================================================
   - name: fct_ad_event
     description: 
-      "An ad to user event such as user being shown an ad (impression), 
+      An ad to user event such as user being shown an ad (impression), 
       user interacting with an ad (click), or user taking action because
-      of an ad (conversion)."
+      of an ad (conversion).
     
     columns:
     - name: event_id
@@ -69,8 +69,8 @@ models:
   # =====================================================
   - name: fct_content_playback_session
     description:
-      "An instance of a user viewing content within a session. A user may view content more
-      than once in the same session."
+      An instance of a user viewing content within a session. A user may view content more
+      than once in the same session.
     
     columns:
       - name: playback_session_id
@@ -137,7 +137,7 @@ models:
 
   - name: fct_campaign_daily
     description:
-      "Daily summary of ad campaign performance"
+      Daily summary of ad campaign performance
     agg_time_dimension: date_key
 
     columns:
@@ -222,7 +222,7 @@ models:
 
   - name: fct_content_monetization_daily
     description:
-      "Daily financial metrics per content"
+      Daily financial metrics per content
 
     metrics:
     - name: playback_hours

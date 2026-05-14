@@ -8,11 +8,10 @@ CATALOG_PATH = "input/catalog.json"
 
 # get the table name and ID and column names from manifest, as it is the most comprehensive source of tables
 manifest = json.loads(Path(MANIFEST_PATH).read_text())
-# get the 
+# get the
 catalog = json.loads(Path(CATALOG_PATH).read_text())
 
 models = {}
-relationships = []
 
 # Parse dbt models
 for unique_id, node in manifest["nodes"].items():
@@ -21,15 +20,15 @@ for unique_id, node in manifest["nodes"].items():
 
     model_name = node["name"]
     # only include facts and dimensions, exclude marts and staging tables
-    if model_name[0:3] not in ('fct','dim'):
+    if model_name[0:3] not in ("fct", "dim"):
         continue
 
-    print('Parsing model:', model_name)
+    print("Parsing model:", model_name)
     catalog_col = (
         catalog.get("nodes", {})
         .get(unique_id, {})
         .get("columns", {})
-            #.get(col_name.upper(), {})
+        # .get(col_name.upper(), {})
     )
     columns = []
 
@@ -40,11 +39,15 @@ for unique_id, node in manifest["nodes"].items():
         # however only manifest has descriptions
         manifest_col_meta = node.get("columns", {}).get(col_name, {})
 
-        columns.append({
-            "name": col_name,
-            "description": manifest_col_meta.get("description"),
-            "data_type": col_meta.get("type").lower() if col_meta.get("type") else None,
-        })
+        columns.append(
+            {
+                "name": col_name,
+                "description": manifest_col_meta.get("description"),
+                "data_type": (
+                    col_meta.get("type").lower() if col_meta.get("type") else None
+                ),
+            }
+        )
 
     models[model_name] = {
         "name": model_name,
@@ -61,8 +64,6 @@ for unique_id, node in manifest["nodes"].items():
 #    "models": list(models.values()),
 #    "relationships": relationships,
 # }
-
-models = list(models.values())
 
 # =========================================================
 # WRITE OUTPUT

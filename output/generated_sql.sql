@@ -51,4 +51,28 @@ SELECT
     WHEN cost_usd IS NULL OR cost_usd = 0 THEN NULL
     ELSE revenue_usd / cost_usd
   END AS roas
-FROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily;
+FROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily;"""Analysis Request: Find historical roas by week
+Reasoning: We have a roas metric stored on fct_campaign_daily (column roas) and revenue_usd / cost_usd columns on the same table. To compute historical ROAS by calendar week we should aggregate daily rows to weekly level using the dim_calendar relationship (fct_campaign_daily.date_key -> dim_calendar.date_key). To avoid averaging per-day ROAS (which is biased), compute weekly ROAS as sum(revenue_usd) / sum(cost_usd). Handle zero cost with NULLIF to avoid division-by-zero. Return year and week from dim_calendar and order chronologically.
+Tables Used: ['STREAMING_ADS.streaming_ads_schema.fct_campaign_daily', 'STREAMING_ADS.streaming_ads_schema.dim_calendar']
+Columns Used: ['fct_campaign_daily.date_key', 'fct_campaign_daily.revenue_usd', 'fct_campaign_daily.cost_usd', 'dim_calendar.date_key', 'dim_calendar.year', 'dim_calendar.week']
+Warnings: ['Weeks spanning year boundaries are grouped by the year value in dim_calendar. If you want ISO-week semantics or a different week definition, confirm dim_calendar.week semantics.', 'Rows with SUM(cost_usd) = 0 will yield NULL for roas_weekly to avoid division by zero.']
+"""
+
+SELECT
+  c.year AS year,
+  c.week AS week,
+  SUM(f.revenue_usd) AS revenue_usd_weekly,
+  SUM(f.cost_usd) AS cost_usd_weekly,
+  CASE
+    WHEN SUM(f.cost_usd) = 0 THEN NULL
+    ELSE SUM(f.revenue_usd) / NULLIF(SUM(f.cost_usd), 0)
+  END AS roas_weekly
+FROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily f
+JOIN STREAMING_ADS.streaming_ads_schema.dim_calendar c
+  ON f.date_key = c.date_key
+GROUP BY
+  c.year,
+  c.week
+ORDER BY
+  c.year,
+  c.week;
