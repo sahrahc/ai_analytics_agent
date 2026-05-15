@@ -57,13 +57,12 @@ embedding_model = SentenceTransformer(config.settings.EMBEDDING_MODEL)
 # Build rows for insertion
 rows = []
 
-for model in models:
+for model in models.values():
+    print(f"Building embedding for models: ", model)
+
     text = build_embedding_text("model", model)
     embedding = embedding_model.encode(text).tolist()
-
-    rows.append(
-        ("model", model["model_name"], json.dumps(model), vector_to_pg(embedding))
-    )
+    rows.append(("model", model["name"], json.dumps(model), vector_to_pg(embedding)))
 
 for rel in relationships:
     text = build_embedding_text("relationship", rel)
@@ -72,7 +71,7 @@ for rel in relationships:
     rows.append(
         (
             "relationship",
-            f"{rel['source_model']}->{rel['target_model']}",
+            f"{rel['from_model']}->{rel['to_model']}",
             json.dumps(rel),
             vector_to_pg(embedding),
         )
@@ -116,7 +115,7 @@ with get_connection() as conn:
         execute_values(
             cursor,
             """
-            INSERT INTO schema_embeddings (
+            INSERT INTO ads_schema_embeddings (
                 entity_type,
                 entity_name,
                 metadata,

@@ -19,6 +19,7 @@ def init_pool():
             user=settings.postgress_conn_params["user"],
             password=settings.postgress_conn_params["password"],
         )
+    print("database: ", settings.postgress_conn_params["database"])
 
 
 @contextmanager
