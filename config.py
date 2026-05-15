@@ -56,6 +56,20 @@ class AppSettings:
         encryption_algorithm=serialization.NoEncryption(),
     )
 
+    # postgress connection
+    # Fetch configurations safely from the OS environment
+    postgress_conn_params = {
+        "host": os.getenv("DB_HOST"),
+        "port": os.getenv("DB_PORT"),
+        "database": os.getenv("DB_NAME"),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
+    }
+
+    # pgvector embedding configuration
+    EMBEDDING_DIMENSION = 384  # all-MiniLM-L6-v2 output size
+    EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+
 
 # Create a single global configuration object
 settings = AppSettings()
