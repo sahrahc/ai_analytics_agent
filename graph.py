@@ -3,17 +3,13 @@ from langgraph.graph import StateGraph, END
 # from langgraph.checkpoint.memory import MemorySaver
 # from langgraph.checkpoint.serde.jsonplus import JsonPlusSerializer
 
-from retrieval.identify_metrics import identify_metrics
 from state import GraphState
 
-# generators
-from retrieval.build_prompt_context import build_prompt_context
-
 # validators
-from validator.validate_static_sql import validate_static_sql
-from validator.validate_semantic_sql import validate_semantic_sql
-from validator.validate_database import validate_with_database
-from generator.generate_sql_mock import generate_sql_mock
+from validation.validate_static_sql import validate_static_sql
+from validation.validate_semantic_sql import validate_semantic_sql
+from validation.validate_database import validate_with_database
+from agent.generate_sql_mock import generate_sql_mock
 
 # -----------------------------------
 # Build LangGraph
@@ -33,14 +29,13 @@ generate_sql = generate_sql_mock
 
 workflow = StateGraph(GraphState)
 
-workflow.add_node("build_prompt_context", build_prompt_context)
 # from external components
 workflow.add_node("generate_sql", generate_sql)
 workflow.add_node("validate_static_sql", validate_static_sql)
 workflow.add_node("validate_semantic_sql", validate_semantic_sql)
 workflow.add_node("validate_with_database", validate_with_database)
 
-workflow.set_entry_point("build_prompt_context")
+workflow.set_entry_point("generate_sql")
 
 workflow.add_edge("build_prompt_context", "generate_sql")
 workflow.add_edge("generate_sql", "validate_static_sql")
