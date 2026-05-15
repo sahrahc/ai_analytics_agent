@@ -21,6 +21,10 @@ dependencies = [
     "pyyaml>=6.0.3",
     "cryptography>=48.0.0",
     "rapidfuzz>=3.14.5",
+    "psycopg2-binary>=2.9.12",
+    "psycopg2>=2.9.12",
+    "pgvector>=0.4.2",
+    "sentence-transformers>=5.5.0",
 ]
 
 [dependency-groups]
@@ -29,6 +33,7 @@ dev = [
     "pytest>=8.0.0",
     "ruff>=0.3.0",
     "mypy>=1.9.0",
+    "types-psycopg2>=2.9.21.20260509",
 ]
 
 [tool.ruff]
