@@ -1,11 +1,7 @@
-import json
-import sqlglot
 from sqlglot import expressions
 from sqlglot import exp
 from state import GraphState
-from pathlib import Path
-import importlib
-from retrieval.semantic_data import models, relationships  # noqa: F401
+from metadata.semantic_data import models, relationships  # noqa: F401
 
 # importlib.reload(json)
 # -----------------------------------
