@@ -6,3 +6,7 @@ __pycache__/
 
 # macOS
 .DS_Store
+
+# logs
+openai_response.log
+snowflake_response.log

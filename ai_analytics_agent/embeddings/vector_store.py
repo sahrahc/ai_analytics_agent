@@ -35,7 +35,7 @@ def retrieve_relevant_metadata(analysis_request: str, top_k: int = 5):
                     entity_name,
                     metadata,
                     embedding <=> %s::vector AS distance
-                FROM schema_embeddings
+                FROM ads_schema_embeddings
                 ORDER BY distance
                 LIMIT %s
                 """,

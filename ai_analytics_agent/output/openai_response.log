@@ -673,3 +673,273 @@
   }
 }
 
+{
+  "timestamp": "2026-05-15 15:40:03.098205",
+  "response_id": "resp_0b0cf5d6b6630fb3006a07768c238881939165309ce41c4522",
+  "model": "gpt-5-mini-2025-08-07",
+  "response_text": "{\n  \"analysis_request\": \"Create a Snowflake SQL query that returns the daily campaign-level metrics from the fct_campaign_daily model.\",\n  \"reasoning\": \"The provided model fct_campaign_daily already contains daily, campaign-grain metrics. No additional joins or derived metrics were requested, so the query selects the relevant columns directly from the model's fully qualified name. The result is ordered by date_key and campaign_key to make downstream analysis easier.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  impressions,\\n  clicks,\\n  conversions,\\n  click_through_conversions,\\n  view_through_conversions,\\n  revenue_usd,\\n  cost_usd,\\n  ctr,\\n  click_cvr,\\n  view_cvr,\\n  roas,\\n  loaded_at\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nORDER BY date_key, campaign_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"impressions\",\n    \"clicks\",\n    \"conversions\",\n    \"click_through_conversions\",\n    \"view_through_conversions\",\n    \"revenue_usd\",\n    \"cost_usd\",\n    \"ctr\",\n    \"click_cvr\",\n    \"view_cvr\",\n    \"roas\",\n    \"loaded_at\"\n  ],\n  \"warnings\": [\n    \"No additional metric definitions were provided beyond the columns in the model; the query returns the stored metrics as-is.\",\n    \"date_key is of type text in metadata; if you need date arithmetic or ordering by calendar date, consider casting date_key to a DATE if it contains ISO date strings.\"\n  ]\n}",
+  "full_response": {
+    "id": "resp_0b0cf5d6b6630fb3006a07768c238881939165309ce41c4522",
+    "created_at": 1778873996.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5-mini-2025-08-07",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_0b0cf5d6b6630fb3006a07768cde18819380c71185a9b9e7e0",
+        "summary": [],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": null
+      },
+      {
+        "id": "msg_0b0cf5d6b6630fb3006a07768eb534819395d318d53ca7d6f1",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\n  \"analysis_request\": \"Create a Snowflake SQL query that returns the daily campaign-level metrics from the fct_campaign_daily model.\",\n  \"reasoning\": \"The provided model fct_campaign_daily already contains daily, campaign-grain metrics. No additional joins or derived metrics were requested, so the query selects the relevant columns directly from the model's fully qualified name. The result is ordered by date_key and campaign_key to make downstream analysis easier.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  date_key,\\n  impressions,\\n  clicks,\\n  conversions,\\n  click_through_conversions,\\n  view_through_conversions,\\n  revenue_usd,\\n  cost_usd,\\n  ctr,\\n  click_cvr,\\n  view_cvr,\\n  roas,\\n  loaded_at\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nORDER BY date_key, campaign_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"impressions\",\n    \"clicks\",\n    \"conversions\",\n    \"click_through_conversions\",\n    \"view_through_conversions\",\n    \"revenue_usd\",\n    \"cost_usd\",\n    \"ctr\",\n    \"click_cvr\",\n    \"view_cvr\",\n    \"roas\",\n    \"loaded_at\"\n  ],\n  \"warnings\": [\n    \"No additional metric definitions were provided beyond the columns in the model; the query returns the stored metrics as-is.\",\n    \"date_key is of type text in metadata; if you need date arithmetic or ordering by calendar date, consider casting date_key to a DATE if it contains ISO date strings.\"\n  ]\n}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1778874002.0,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "effort": "low",
+      "generate_summary": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "sql_generation_response",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "analysis_request": {
+              "type": "string"
+            },
+            "reasoning": {
+              "type": "string"
+            },
+            "sql": {
+              "type": "string"
+            },
+            "tables_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "columns_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "analysis_request",
+            "reasoning",
+            "sql",
+            "tables_used",
+            "columns_used",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 657,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 561,
+      "output_tokens_details": {
+        "reasoning_tokens": 128
+      },
+      "total_tokens": 1218
+    },
+    "user": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "moderation": null,
+    "presence_penalty": 0.0,
+    "store": true
+  }
+}
+
+{
+  "timestamp": "2026-05-15 15:42:50.832677",
+  "response_id": "resp_04f099c0f65225d5006a07772e9de481958843cd873d9b5944",
+  "model": "gpt-5-mini-2025-08-07",
+  "response_text": "{\n  \"analysis_request\": \"Aggregate campaign daily metrics by campaign_key and date, computing CTR, click CVR, and ROAS while handling divide-by-zero and casting the text date_key to a date.\",\n  \"reasoning\": \"The model fct_campaign_daily is a daily summary at the (campaign_key, date_key) grain. To avoid changing grain, aggregate by campaign_key and date_key. date_key is stored as text so convert to a date using TRY_TO_DATE to avoid errors on unexpected formats. Compute CTR, click CVR, and ROAS using summed numerators and NULLIF on denominators to prevent divide-by-zero. Use only columns present in the provided metadata and reference the fully-qualified table name in Snowflake.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  TRY_TO_DATE(date_key) AS date,\\n  SUM(impressions)       AS impressions,\\n  SUM(clicks)            AS clicks,\\n  SUM(conversions)       AS conversions,\\n  SUM(revenue_usd)       AS revenue_usd,\\n  SUM(cost_usd)          AS cost_usd,\\n  CASE WHEN SUM(impressions) = 0 THEN NULL ELSE SUM(clicks) / NULLIF(SUM(impressions), 0) END AS ctr,\\n  CASE WHEN SUM(clicks) = 0 THEN NULL ELSE SUM(conversions) / NULLIF(SUM(clicks), 0) END AS click_cvr,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / NULLIF(SUM(cost_usd), 0) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY\\n  campaign_key,\\n  TRY_TO_DATE(date_key)\\nORDER BY\\n  date DESC,\\n  campaign_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"impressions\",\n    \"clicks\",\n    \"conversions\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"date_key is stored as text; TRY_TO_DATE is used to coerce to a date. If date_key uses a non-standard format, some values may become NULL.\",\n    \"The table already contains precomputed metrics (ctr, click_cvr, roas). This query recomputes them from raw counts and amounts to ensure correctness at the aggregated level.\",\n    \"Division-by-zero is handled using NULLIF; results will be NULL where denominators sum to zero.\"\n  ]\n}",
+  "full_response": {
+    "id": "resp_04f099c0f65225d5006a07772e9de481958843cd873d9b5944",
+    "created_at": 1778874158.0,
+    "error": null,
+    "incomplete_details": null,
+    "instructions": null,
+    "metadata": {},
+    "model": "gpt-5-mini-2025-08-07",
+    "object": "response",
+    "output": [
+      {
+        "id": "rs_04f099c0f65225d5006a07772f3c448195b8734f95ca56648c",
+        "summary": [],
+        "type": "reasoning",
+        "content": null,
+        "encrypted_content": null,
+        "status": null
+      },
+      {
+        "id": "msg_04f099c0f65225d5006a077734bb988195aaa8f595db425fcd",
+        "content": [
+          {
+            "annotations": [],
+            "text": "{\n  \"analysis_request\": \"Aggregate campaign daily metrics by campaign_key and date, computing CTR, click CVR, and ROAS while handling divide-by-zero and casting the text date_key to a date.\",\n  \"reasoning\": \"The model fct_campaign_daily is a daily summary at the (campaign_key, date_key) grain. To avoid changing grain, aggregate by campaign_key and date_key. date_key is stored as text so convert to a date using TRY_TO_DATE to avoid errors on unexpected formats. Compute CTR, click CVR, and ROAS using summed numerators and NULLIF on denominators to prevent divide-by-zero. Use only columns present in the provided metadata and reference the fully-qualified table name in Snowflake.\",\n  \"sql\": \"SELECT\\n  campaign_key,\\n  TRY_TO_DATE(date_key) AS date,\\n  SUM(impressions)       AS impressions,\\n  SUM(clicks)            AS clicks,\\n  SUM(conversions)       AS conversions,\\n  SUM(revenue_usd)       AS revenue_usd,\\n  SUM(cost_usd)          AS cost_usd,\\n  CASE WHEN SUM(impressions) = 0 THEN NULL ELSE SUM(clicks) / NULLIF(SUM(impressions), 0) END AS ctr,\\n  CASE WHEN SUM(clicks) = 0 THEN NULL ELSE SUM(conversions) / NULLIF(SUM(clicks), 0) END AS click_cvr,\\n  CASE WHEN SUM(cost_usd) = 0 THEN NULL ELSE SUM(revenue_usd) / NULLIF(SUM(cost_usd), 0) END AS roas\\nFROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\\nGROUP BY\\n  campaign_key,\\n  TRY_TO_DATE(date_key)\\nORDER BY\\n  date DESC,\\n  campaign_key;\",\n  \"tables_used\": [\n    \"STREAMING_ADS.streaming_ads_schema.fct_campaign_daily\"\n  ],\n  \"columns_used\": [\n    \"campaign_key\",\n    \"date_key\",\n    \"impressions\",\n    \"clicks\",\n    \"conversions\",\n    \"revenue_usd\",\n    \"cost_usd\"\n  ],\n  \"warnings\": [\n    \"date_key is stored as text; TRY_TO_DATE is used to coerce to a date. If date_key uses a non-standard format, some values may become NULL.\",\n    \"The table already contains precomputed metrics (ctr, click_cvr, roas). This query recomputes them from raw counts and amounts to ensure correctness at the aggregated level.\",\n    \"Division-by-zero is handled using NULLIF; results will be NULL where denominators sum to zero.\"\n  ]\n}",
+            "type": "output_text",
+            "logprobs": []
+          }
+        ],
+        "role": "assistant",
+        "status": "completed",
+        "type": "message",
+        "phase": null
+      }
+    ],
+    "parallel_tool_calls": true,
+    "temperature": 1.0,
+    "tool_choice": "auto",
+    "tools": [],
+    "top_p": 1.0,
+    "background": false,
+    "completed_at": 1778874170.0,
+    "conversation": null,
+    "max_output_tokens": null,
+    "max_tool_calls": null,
+    "previous_response_id": null,
+    "prompt": null,
+    "prompt_cache_key": null,
+    "prompt_cache_retention": "in_memory",
+    "reasoning": {
+      "effort": "low",
+      "generate_summary": null,
+      "summary": null
+    },
+    "safety_identifier": null,
+    "service_tier": "default",
+    "status": "completed",
+    "text": {
+      "format": {
+        "name": "sql_generation_response",
+        "schema_": {
+          "type": "object",
+          "properties": {
+            "analysis_request": {
+              "type": "string"
+            },
+            "reasoning": {
+              "type": "string"
+            },
+            "sql": {
+              "type": "string"
+            },
+            "tables_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "columns_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "warnings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "analysis_request",
+            "reasoning",
+            "sql",
+            "tables_used",
+            "columns_used",
+            "warnings"
+          ],
+          "additionalProperties": false
+        },
+        "type": "json_schema",
+        "description": null,
+        "strict": true
+      },
+      "verbosity": "medium"
+    },
+    "top_logprobs": 0,
+    "truncation": "disabled",
+    "usage": {
+      "input_tokens": 657,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 1145,
+      "output_tokens_details": {
+        "reasoning_tokens": 576
+      },
+      "total_tokens": 1802
+    },
+    "user": null,
+    "billing": {
+      "payer": "developer"
+    },
+    "frequency_penalty": 0.0,
+    "moderation": null,
+    "presence_penalty": 0.0,
+    "store": true
+  }
+}
+

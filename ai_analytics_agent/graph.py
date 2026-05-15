@@ -11,7 +11,9 @@ from ai_analytics_agent.validation.validate_static_sql import validate_static_sq
 from ai_analytics_agent.validation.validate_semantic_sql import validate_semantic_sql
 from ai_analytics_agent.validation.validate_database import validate_with_database
 
-from ai_analytics_agent.agent.generate_sql_mock import generate_sql_mock
+from ai_analytics_agent.agent.generate_sql import generate_sql
+
+# from ai_analytics_agent.agent.generate_sql_mock import generate_sql_mock
 
 # -----------------------------------
 # Build LangGraph
@@ -28,8 +30,8 @@ from ai_analytics_agent.agent.generate_sql_mock import generate_sql_mock
 # config = {"configurable": {"thread_id": new_thread_id}}
 
 # for E2E testing with mock SQL
-generate_sql = generate_sql_mock
-# gernate_sql = generate_sql
+# generate_sql = generate_sql_mock
+gernate_sql = generate_sql
 workflow = StateGraph(GraphState)
 
 # from external components
