@@ -11,8 +11,7 @@ from sqlglot import expressions
 
 class GraphState(TypedDict):
     analysis_request: str
-    target_metric: dict
-    prompt_context: dict
+    # prompt_context: dict
     sql: str
     parsed_sql: expressions.Select | None
     validation_status: str

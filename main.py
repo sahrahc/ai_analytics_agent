@@ -3,6 +3,7 @@ import sys
 from typing import cast
 
 # third party libraries
+from metadata_db import close_pool
 import snowflake.connector
 from openai import OpenAI
 from langchain_core.runnables import RunnableConfig
@@ -11,8 +12,6 @@ from langchain_core.runnables import RunnableConfig
 from graph import lang_graph
 from state import GraphState
 from config import settings
-
-from retrieval.identify_metrics import identify_metrics
 
 # ----------------------------------------------------------------------
 # There are two sections to this file, eventually to be two components:
@@ -27,8 +26,8 @@ from retrieval.identify_metrics import identify_metrics
 # Comment out to be run as needed for now.
 # ----------------------------------------------------------------------
 # execute these separate files to refresh semantic metadata json files:
-# - parser/parser_semantic_context.py -- loads entities/models
-# - parser/parser_semantic_model_facts.py -- loads relationships and metrics
+# - metadata_registry/parser_semantic_context.py -- loads entities/models
+# - metadata_registry/parser_semantic_model_facts.py -- loads relationships and metrics
 # output: three files in output/:
 #   semantic_context.json,
 #   semantic_model_relationships.json,
@@ -51,10 +50,10 @@ else:
 
 
 # 2. load semantic metadata for use by part 2.
-from retrieval.semantic_data import metrics  # noqa: F401
+from metadata.semantic_data import metrics  # noqa: F401
 
 # 3. retrieval
-target_metric = identify_metrics(analysis_request, metrics)
+# target_metric = identify_metrics(analysis_request, metrics)
 
 # -----------------------------------
 # Establish connection to Snowflake and OpenAI
@@ -80,27 +79,28 @@ client = OpenAI()
 # Execute
 # -----------------------------------
 
-try:
-    # 2. Bundle the thread_id (for LangGraph) and sf_session (for your code)
-    lang_graph_config: RunnableConfig = {
-        "configurable": {
-            "thread_id": "sequential_session_101",  # Required by checkpointer
-            "db_connection": db_connection,  # Passed directly to nodes
-            "openai_client": client,  # Passed directly to nodes
+if __name__ == "__main__":
+
+    try:
+        # 2. Bundle the thread_id (for LangGraph) and sf_session (for your code)
+        lang_graph_config: RunnableConfig = {
+            "configurable": {
+                "thread_id": "sequential_session_101",  # Required by checkpointer
+                "db_connection": db_connection,  # Passed directly to nodes
+                "openai_client": client,  # Passed directly to nodes
+            }
         }
-    }
 
-    # explicit casting for type checking only
-    initial_state: GraphState = {
-        "analysis_request": "analysis_request",
-        "target_metric": target_metric,
-        "prompt_context": {},
-        "sql": "",
-        "parsed_sql": None,
-        "validation_status": "",
-    }
+        # explicit casting for type checking only
+        initial_state: GraphState = {
+            "analysis_request": "analysis_request",
+            "sql": "",
+            "parsed_sql": None,
+            "validation_status": "",
+        }
 
-    result = lang_graph.invoke(initial_state, config=lang_graph_config)  # type: ignore
+        result = lang_graph.invoke(initial_state, config=lang_graph_config)  # type: ignore
 
-finally:
-    db_connection.close()
+    finally:
+        db_connection.close()
+        close_pool()  # Clean up postgres database
