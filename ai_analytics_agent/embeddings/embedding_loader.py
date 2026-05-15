@@ -37,9 +37,16 @@ from sentence_transformers import SentenceTransformer
 
 # custom
 from ai_analytics_agent import config
-from metadata.semantic_data import models, relationships, metrics  # noqa: F401
-from embedding_utils import build_embedding_text, vector_to_pg
-from metadata_db import get_connection, close_pool
+from ai_analytics_agent.metadata.semantic_data import (
+    models,
+    relationships,
+    metrics,
+)  # noqa: F401
+from ai_analytics_agent.embeddings.embedding_utils import (
+    build_embedding_text,
+    vector_to_pg,
+)
+from ai_analytics_agent.metadata_db import get_connection, close_pool
 
 # --------------------------------------------------
 # Initialize database:

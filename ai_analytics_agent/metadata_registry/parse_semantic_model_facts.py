@@ -27,6 +27,9 @@ with open(YAML_PATH, "r") as f:
 relationships = []
 metrics = []
 
+if data is None:
+    raise Exception(f"No data found in {YAML_PATH}")
+
 for model in data.get("models", []):
     model_name = model["name"]
 

@@ -3,15 +3,15 @@ import sys
 from typing import cast
 
 # third party libraries
-from metadata_db import close_pool
 import snowflake.connector
 from openai import OpenAI
 from langchain_core.runnables import RunnableConfig
 
 # internal modules
-from graph import lang_graph
-from state import GraphState
-from config import settings
+from ai_analytics_agent.graph import lang_graph
+from ai_analytics_agent.state import GraphState
+from ai_analytics_agent.config import settings
+from ai_analytics_agent.metadata_db import close_pool
 
 # ----------------------------------------------------------------------
 # There are two sections to this file, eventually to be two components:

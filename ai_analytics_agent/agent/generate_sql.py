@@ -6,9 +6,9 @@ from langchain_core.runnables import RunnableConfig
 from openai import OpenAI
 
 # custom libraries
-from state import GraphState
-from embeddings.vector_store import retrieve_relevant_metadata
-from prompts.build_prompt import build_prompt
+from ai_analytics_agent.state import GraphState
+from ai_analytics_agent.embeddings.vector_store import retrieve_relevant_metadata
+from ai_analytics_agent.prompts.build_prompt import build_prompt
 
 # -----------------------------------
 # Generate SQL using LLM

@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from psycopg2 import pool
-from config import settings
+from ai_analytics_agent.config import settings
 
 # Initialize pool variable
 _pool = None

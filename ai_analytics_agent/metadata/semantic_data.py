@@ -1,5 +1,5 @@
 import json
-from metadata.load_metadata import (
+from ai_analytics_agent.metadata.load_metadata import (
     load_semantic_models,
     load_relationships,
     load_metrics,

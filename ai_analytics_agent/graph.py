@@ -7,11 +7,11 @@ from langgraph.graph import StateGraph, END
 from state import GraphState
 
 # validators
-from validation.validate_static_sql import validate_static_sql
-from validation.validate_semantic_sql import validate_semantic_sql
-from validation.validate_database import validate_with_database
+from ai_analytics_agent.validation.validate_static_sql import validate_static_sql
+from ai_analytics_agent.validation.validate_semantic_sql import validate_semantic_sql
+from ai_analytics_agent.validation.validate_database import validate_with_database
 
-from agent.generate_sql_mock import generate_sql_mock
+from ai_analytics_agent.agent.generate_sql_mock import generate_sql_mock
 
 # -----------------------------------
 # Build LangGraph
