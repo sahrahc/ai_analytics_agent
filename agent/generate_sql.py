@@ -1,11 +1,14 @@
 import json
 from datetime import datetime
-from urllib import response
 
-from state import GraphState
+# third party
 from langchain_core.runnables import RunnableConfig
-
 from openai import OpenAI
+
+# custom libraries
+from state import GraphState
+from embeddings.vector_store import retrieve_relevant_metadata
+from prompts.build_prompt import build_prompt
 
 # -----------------------------------
 # Generate SQL using LLM
@@ -13,33 +16,25 @@ from openai import OpenAI
 OUTPUT_PATH = "output/generated_sql.sql"
 LOG_FILE = "output/openai_response.log"
 
+TOP_K = 1
+
 
 # Build compact context
 def generate_sql(state: GraphState, config: RunnableConfig):
 
-    system_prompt = """
-    You are a senior analytics engineer.
+    analysis_request = state["analysis_request"]
 
-    Generate valid Snowflake SQL using the provided semantic metadata.
+    # Step 1: similarity search
+    metadata_results = retrieve_relevant_metadata(
+        analysis_request=analysis_request, top_k=TOP_K
+    )
 
-    Instructions:
-    - Think step-by-step before generating SQL
-    - Respect metric definitions
-    - Respect table grain
-    - Do not invent joins or columns
-    - Return structured JSON
-    """
+    # Step 2: build prompt
+    system_prompt, user_prompt = build_prompt(
+        analysis_request=analysis_request, metadata_results=metadata_results
+    )
 
-    user_prompt = f"""
-    Generate SQL for the following analysis request, by identifying the correct set of metrics
-    using the provided semantic context:
-
-    {state['analysis_request']}
-
-    Context:
-    {json.dumps(state['prompt_context'], indent=2)}
-    """
-
+    # Step 3: call OpenAI
     openai_client = config.get("configurable", {}).get("openai_client")
     if not openai_client:
         raise RuntimeError("OpenAI client not found in config")
@@ -82,6 +77,9 @@ def generate_sql(state: GraphState, config: RunnableConfig):
             {"role": "user", "content": user_prompt},
         ],
     )
+
+    # ------------------------------------------------------------------
+    # Logging and output handling
 
     timestamp = datetime.now()
 
