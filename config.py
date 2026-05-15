@@ -5,9 +5,10 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 
 # -----------------------------------
-# Establish connection to Snowflake
-# using environment variables
-# reuse this connection across modules
+# Config
+# Single session, this code is not
+# configured for multi-threading or
+#   multiple concurrent executions.
 # -----------------------------------
 
 load_dotenv()

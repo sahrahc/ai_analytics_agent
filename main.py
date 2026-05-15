@@ -1,21 +1,44 @@
+from asyncio import subprocess
 import sys
+from typing import cast
+
+# third party libraries
 import snowflake.connector
 from openai import OpenAI
 from langchain_core.runnables import RunnableConfig
 
+# internal modules
 from graph import lang_graph
 from state import GraphState
 from config import settings
 
-# -----------------------------------
-# Config
-# Single session, this code is not
-# configured for multi-threading or
-#   multiple concurrent executions.
-# -----------------------------------
+from retrieval.identify_metrics import identify_metrics
 
+# ----------------------------------------------------------------------
+# There are two sections to this file, eventually to be two components:
+#
+# 1. Semantic metadata processing - scheduling dependent on metadata
+# change frequency.
+# 2. Analytics request processing - triggered by incoming request
+# ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+# PART ONE - Semantic metadata processing
+# Comment out to be run as needed for now.
+# ----------------------------------------------------------------------
+# execute these separate files to refresh semantic metadata json files:
+# - parser/parser_semantic_context.py -- loads entities/models
+# - parser/parser_semantic_model_facts.py -- loads relationships and metrics
+# output: three files in output/:
+#   semantic_context.json,
+#   semantic_model_relationships.json,
+#   semantic_model_metrics.json
+
+# ----------------------------------------------------------------------
+# PART TWO - Analytics request processing
+# ----------------------------------------------------------------------
 # -----------------------------------
-# Store request on initial state
+# 1. Store request on initial state
 # -----------------------------------
 
 analysis_request = sys.argv[1] if len(sys.argv) > 1 else None
@@ -26,9 +49,18 @@ if analysis_request is None:
 else:
     print(f"Runtime parameter received: {analysis_request}")
 
+
+# 2. load semantic metadata for use by part 2.
+from retrieval.semantic_data import metrics  # noqa: F401
+
+# 3. retrieval
+target_metric = identify_metrics(analysis_request, metrics)
+
 # -----------------------------------
-# Runtime configuration for LangGraph
+# Establish connection to Snowflake and OpenAI
+# for Runtime configuration for LangGraph
 # -----------------------------------
+
 # Connect to Snowflake
 db_connection = snowflake.connector.connect(
     user=settings.SNOWFLAKE_USER,
@@ -44,6 +76,10 @@ db_connection = snowflake.connector.connect(
 # own module to enable using same connection settings across multiple modules.
 client = OpenAI()
 
+# -----------------------------------
+# Execute
+# -----------------------------------
+
 try:
     # 2. Bundle the thread_id (for LangGraph) and sf_session (for your code)
     lang_graph_config: RunnableConfig = {
@@ -54,22 +90,17 @@ try:
         }
     }
 
-    # -----------------------------------
-    # Execute
-    # -----------------------------------
-
+    # explicit casting for type checking only
     initial_state: GraphState = {
-        "analysis_request": analysis_request,
-        "target_metric": {},
-        "semantic_model": {"models": [], "relationships": []},
-        "metrics": [],
+        "analysis_request": "analysis_request",
+        "target_metric": target_metric,
         "prompt_context": {},
         "sql": "",
         "parsed_sql": None,
         "validation_status": "",
     }
 
-    result = lang_graph.invoke(initial_state, config=lang_graph_config)
+    result = lang_graph.invoke(initial_state, config=lang_graph_config)  # type: ignore
 
 finally:
     db_connection.close()

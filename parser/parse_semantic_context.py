@@ -4,6 +4,8 @@ from pathlib import Path
 MANIFEST_PATH = "input/manifest.json"
 CATALOG_PATH = "input/catalog.json"
 
+OUTPUT_PATH = "output/semantic_context.json"
+
 ###############################################################
 
 # get the table name and ID and column names from manifest, as it is the most comprehensive source of tables
@@ -68,8 +70,6 @@ for unique_id, node in manifest["nodes"].items():
 # =========================================================
 # WRITE OUTPUT
 # =========================================================
-
-OUTPUT_PATH = "output/semantic_context.json"
 
 with open(OUTPUT_PATH, "w") as f:
     json.dump(models, f, indent=2)

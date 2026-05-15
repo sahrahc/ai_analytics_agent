@@ -296,7 +296,7 @@
   },
   "dim_campaign": {
     "name": "dim_campaign",
-    "description": "A plan for changing the behavior of an organization's customer or potential customer via advertising",
+    "description": "A plan for changing the behavior of an customer or potential customer via advertising",
     "database": "STREAMING_ADS",
     "schema": "streaming_ads_schema",
     "alias": "dim_campaign",

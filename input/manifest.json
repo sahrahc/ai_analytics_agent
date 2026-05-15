@@ -3723,7 +3723,7 @@
                 }
             },
             "tags": [],
-            "description": "A plan for changing the behavior of an organization's customer or potential customer via advertising",
+            "description": "A plan for changing the behavior of an customer or potential customer via advertising",
             "columns": {
                 "campaign_id": {
                     "name": "campaign_id",

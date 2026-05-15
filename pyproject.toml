@@ -17,6 +17,10 @@ dependencies = [
     "snowflake-connector-python>=3.7.0", # Standard connection package
     "python-dotenv>=1.0.1",
     "sqlglot>=30.8.0",                # Added for SQL parsing and validation
+    "dotenv>=0.9.9",
+    "pyyaml>=6.0.3",
+    "cryptography>=48.0.0",
+    "rapidfuzz>=3.14.5",
 ]
 
 [dependency-groups]
