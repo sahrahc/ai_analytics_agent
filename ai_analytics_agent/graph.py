@@ -1,3 +1,4 @@
+from agent.generate_sql import generate_sql
 from langgraph.graph import StateGraph, END
 
 # from langgraph.checkpoint.memory import MemorySaver
@@ -9,6 +10,7 @@ from state import GraphState
 from validation.validate_static_sql import validate_static_sql
 from validation.validate_semantic_sql import validate_semantic_sql
 from validation.validate_database import validate_with_database
+
 from agent.generate_sql_mock import generate_sql_mock
 
 # -----------------------------------
@@ -25,8 +27,9 @@ from agent.generate_sql_mock import generate_sql_mock
 # new_thread_id = str(uuid.uuid4())
 # config = {"configurable": {"thread_id": new_thread_id}}
 
+# for E2E testing with mock SQL
 generate_sql = generate_sql_mock
-
+# gernate_sql = generate_sql
 workflow = StateGraph(GraphState)
 
 # from external components
@@ -37,7 +40,6 @@ workflow.add_node("validate_with_database", validate_with_database)
 
 workflow.set_entry_point("generate_sql")
 
-workflow.add_edge("build_prompt_context", "generate_sql")
 workflow.add_edge("generate_sql", "validate_static_sql")
 workflow.add_edge("validate_static_sql", "validate_semantic_sql")
 workflow.add_edge("validate_semantic_sql", "validate_with_database")

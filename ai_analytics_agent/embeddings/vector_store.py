@@ -1,7 +1,7 @@
 from config import settings
 from metadata_db import get_connection
 from sentence_transformers import SentenceTransformer
-from embedding_utils import vector_to_pg
+from embeddings.embedding_utils import vector_to_pg
 from rapidfuzz import fuzz
 
 # --------------------------------------------------

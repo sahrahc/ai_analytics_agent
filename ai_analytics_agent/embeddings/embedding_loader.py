@@ -34,7 +34,9 @@ import json
 import psycopg2
 from psycopg2.extras import execute_values
 from sentence_transformers import SentenceTransformer
-from config import settings
+
+# custom
+from ai_analytics_agent import config
 from metadata.semantic_data import models, relationships, metrics  # noqa: F401
 from embedding_utils import build_embedding_text, vector_to_pg
 from metadata_db import get_connection, close_pool
@@ -43,7 +45,7 @@ from metadata_db import get_connection, close_pool
 # Initialize database:
 # Create pgvector extension + table
 # --------------------------------------------------
-embedding_model = SentenceTransformer(settings.EMBEDDING_MODEL)
+embedding_model = SentenceTransformer(config.settings.EMBEDDING_MODEL)
 
 # Build rows for insertion
 rows = []

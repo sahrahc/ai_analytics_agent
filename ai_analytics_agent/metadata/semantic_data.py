@@ -1,5 +1,5 @@
 import json
-from retrieval.load_metadata import (
+from metadata.load_metadata import (
     load_semantic_models,
     load_relationships,
     load_metrics,
