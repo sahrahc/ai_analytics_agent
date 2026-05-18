@@ -15,7 +15,7 @@ metrics = load_metrics()
 # save semantic model to file for debugging - this is really part ONE
 # but writing to semantic_model file here to avoid duplicate processing.
 # TODO: Move this code when scheduling semantic metadata processing.
-SEMANTIC_MODEL_PATH = "output/semantic_model.json"
+SEMANTIC_MODEL_PATH = "ai_analytics_agent/output/semantic_model.json"
 semantic_model = {"models": models, "relationships": relationships}
 with open(SEMANTIC_MODEL_PATH, "w") as f:
     json.dump(semantic_model, f, indent=2)

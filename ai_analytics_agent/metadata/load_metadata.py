@@ -1,9 +1,9 @@
 import json
 
 # input
-ENTITIES_PATH = "output/semantic_context.json"
-RELATIONSHIPS_PATH = "output/semantic_model_relationships.json"
-METRICS_PATH = "output/semantic_model_metrics.json"
+ENTITIES_PATH = "ai_analytics_agent/output/semantic_context.json"
+RELATIONSHIPS_PATH = "ai_analytics_agent/output/semantic_model_relationships.json"
+METRICS_PATH = "ai_analytics_agent/output/semantic_model_metrics.json"
 
 # -----------------------------------
 # Node 1: Load models (entities)

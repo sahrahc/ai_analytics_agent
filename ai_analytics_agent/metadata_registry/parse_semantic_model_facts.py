@@ -13,11 +13,11 @@ import yaml
 ###############################################################
 
 # inputs
-YAML_PATH = "input/facts.yaml"
+YAML_PATH = "ai_analytics_agent/input/facts.yaml"
 
 # outputs
-METRICS_OUTPUT_PATH = "output/semantic_model_metrics.json"
-REL_OUTPUT_PATH = "output/semantic_model_relationships.json"
+METRICS_OUTPUT_PATH = "ai_analytics_agent/output/semantic_model_metrics.json"
+REL_OUTPUT_PATH = "ai_analytics_agent/output/semantic_model_relationships.json"
 
 ###############################################################
 

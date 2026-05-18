@@ -1,8 +1,15 @@
 import json
 
-from state import GraphState
-from metadata.semantic_data import models, relationships  # noqa: F401
-from prompts.prompt_template import SYSTEM_PROMPTS, USER_PROMPTS, PROMPT_VERSION
+from ai_analytics_agent.state import GraphState
+from ai_analytics_agent.metadata.semantic_data import (
+    models,
+    relationships,
+)  # noqa: F401
+from ai_analytics_agent.prompts.prompt_template import (
+    SYSTEM_PROMPTS,
+    USER_PROMPTS,
+    PROMPT_VERSION,
+)
 
 # -----------------------------------
 # Build prompt
