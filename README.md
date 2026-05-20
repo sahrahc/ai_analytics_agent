@@ -2,32 +2,50 @@
 
 AI-powered semantic analytics platform that converts natural language metric requests into validated Snowflake SQL using dbt metadata, LangGraph orchestration, and OpenAI APIs.
 
+Next Steps:
+1. Intent parser LLM call for more sophisticated requests (dependent on business glossary)
+2. Conditional validations, looping back to SQL processing upon failure (once)
+3. Human-in-the-loop to review final validation and cost estimates
+4. Execute SQL
+
+Additional Steps
+1. Fixtures
+2. Increase unit test coverage
 ---
 
 # Features
+
+1 of 2 Pre-processing Semantic Metadata
 
 * Parse dbt semantic metadata from:
 
   * `manifest.json`
   * `catalog.json`
-  * semantic YAML files
+  * semantic YAML files (`facts.yml`, `dimensions.yml`)
 * Extract:
 
-  * models
+  * models (entities)
   * dimensions
   * metrics
   * PK/FK relationships
   * lineage
-* Generate Snowflake SQL from English prompts
+
+* Load:
+  * build embedding vector
+  * load into postgres metadata database
+
+2 of 2 Agent
+
+* Extract intent from English prompt (in progress)
+* Embedding vector search against intent
+* Generate Snowflake SQL 
 * LangGraph orchestration pipeline
 * Semantic validation using parsed metadata
 * SQL validation using:
-
   * sqlglot
-  * Snowflake `EXPLAIN`
+* Validation and performance via `EXPLAIN` against live Snowflake database
 * Metric documentation generation
 * Prompt versioning support
-* Extensible architecture for pgvector retrieval
 
 ---
 
@@ -46,7 +64,7 @@ SQL Generation
     ↓
 Semantic Validation
     ↓
-Optional Snowflake Validation
+Snowflake Validation
 ```
 
 ---
@@ -55,18 +73,42 @@ Optional Snowflake Validation
 
 ```text
 project/
-├── clients.py
+├── config.py
+├── metadata_db.py
 ├── graph.py
-├── generate_sql.py
-├── parse_metrics.py
-├── parse_relationships.py
-├── validate_sql.py
-├── generate_metric_docs.py
-├── semantic_model.json
-├── metrics.json
+├── state.py
+├── main.py
+├── embeddings/
+│   ├── embedding_loader.py
+│   ├── embedding_utils.py
+│   ├── vector_store.py
 ├── prompts/
-│   ├── system_prompts.py
-│   └── user_prompts.py
+│   ├── build_prompt.py
+│   └── prompt_template.py
+├── metadata/
+│   ├── load_metadata.py
+│   ├── semantic_data.py
+├── agents/
+│   ├── generate_sql.py
+├── validation/
+│   ├── validate_static_sql.py
+│   ├── validate_semantic_sql.py
+│   ├── validate_database.py
+
+(preprocessing)
+
+├── metadata_registry/
+│   ├── parse_semantic_context.py
+│   ├── parse_semantic_model_facts.py
+├── input/
+├── output/
+
+(tests)
+
+├── tests/
+│   ├── conftest.py
+(one test subdirectory for every project subdirectory)
+
 └── README.md
 ```
 
@@ -75,13 +117,19 @@ project/
 # Requirements (see pyproject.toml for full list)
 
 ```bash
-pip install openai
-pip install langgraph
-pip install sqlglot
-pip install pyyaml
-pip install snowflake-connector-python
-pip install pgvector
-pip install psycopg2-binary
+uv add openai
+uv add langgraph
+uv add sqlglot
+uv add pyyaml
+uv add snowflake-connector-python
+uv add pgvector
+uv add psycopg2-binary
+uv add rapidfuzz
+```
+
+# Other setup
+```bash
+brew install postgresql@18
 ```
 
 ---
@@ -92,15 +140,16 @@ pip install psycopg2-binary
 export OPENAI_API_KEY="YOUR_API_KEY"
 ```
 
-Optional Snowflake:
+Snowflake:
 
 ```bash
 export SNOWFLAKE_ACCOUNT="ACCOUNT"
 export SNOWFLAKE_USER="USER"
-export SNOWFLAKE_PASSWORD="PASSWORD"
 export SNOWFLAKE_WAREHOUSE="WAREHOUSE"
 export SNOWFLAKE_DATABASE="DATABASE"
 export SNOWFLAKE_SCHEMA="SCHEMA"
+export PRIVATE_KEY_PATH="SNOWFLAKE_PRIVATE_KEY_PATH"
+export PRIVATE_KEY_PASSPHRASE="SNOWFLAKE_PRIVATE_KEY_PASSPHRASE"
 ```
 
 ---
@@ -124,16 +173,31 @@ Example output:
 
 ```sql
 SELECT
-    SUM(revenue_usd) / NULLIF(SUM(cost_usd), 0) AS roas
-FROM fct_campaign_daily
+  c.year AS year,
+  c.week AS week,
+  SUM(f.revenue_usd) AS revenue_usd_weekly,
+  SUM(f.cost_usd) AS cost_usd_weekly,
+  CASE
+    WHEN SUM(f.cost_usd) = 0 THEN NULL
+    ELSE SUM(f.revenue_usd) / NULLIF(SUM(f.cost_usd), 0)
+  END AS roas_weekly
+FROM STREAMING_ADS.streaming_ads_schema.fct_campaign_daily f
+JOIN STREAMING_ADS.streaming_ads_schema.dim_calendar c
+  ON f.date_key = c.date_key
+GROUP BY
+  c.year,
+  c.week
+ORDER BY
+  c.year,
+  c.week;
 ```
 
 ---
 # Metadata Registry Workflow
 ```text
-parse_dbt_manifest_catalog
+parse_semantic_context (entities from manifest + catalog)
     ↓
-parse_dbt_fact_semantic
+parse_semantic_model_facts (relationships and metrics from facts.yml)
     ↓
 create_vector_embeddings
     ↓
@@ -187,7 +251,7 @@ Validation layers:
 2. Semantic model validation
 3. Join validation
 4. Column validation
-5. Optional Snowflake `EXPLAIN`
+5. Performance of query plan from Snowflake `EXPLAIN` 
 
 Example:
 
@@ -211,7 +275,8 @@ Purpose:
 * validate schema references
 * validate joins
 * detect execution issues
-* avoid full query execution
+* detect performance issues
+*
 
 ---
 
@@ -268,37 +333,11 @@ Supports:
 
 ---
 
-# Recommended Stack
-
-| Component      | Technology            |
-| -------------- | --------------------- |
-| Orchestration  | LangGraph             |
-| LLM            | OpenAI GPT-5 API      |
-| Embeddings     | OpenAI Embeddings API |
-| Warehouse      | Snowflake             |
-| Validation     | sqlglot               |
-| Semantic Store | PostgreSQL            |
-| Vector Search  | pgvector              |
-
 ---
 
-# Example End-to-End Flow
+# Example Queries
 
-```text
-"Which campaigns have the best marketing efficiency?"
-        ↓
-Metric Retrieval
-        ↓
-Semantic Context Retrieval
-        ↓
-OpenAI SQL Generation
-        ↓
-Semantic Validation
-        ↓
-Snowflake EXPLAIN
-        ↓
-Validated SQL
-```
+"Find historical roas summarized by week"
 
 ---
 
